@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
 <MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" />
 <MudPopoverProvider />
@@ -18,7 +19,11 @@
 		<MudSpacer />
 		<AuthorizeView>
 			<Authorized>
-				<MudLink Href="MicrosoftIdentity/Account/SignOut">Sign out</MudLink>
+				@if (NavigationManager != null && !NavigationManager.Uri.Contains("subscription"))
+				{
+					<MudLink Href="/subscription">Subscription</MudLink>
+				}
+				<MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Href="MicrosoftIdentity/Account/SignOut" />
 			</Authorized>
 			<NotAuthorized>
 				<MudLink Href="MicrosoftIdentity/Account/SignIn">Sign in or register</MudLink>

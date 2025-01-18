@@ -35,9 +35,8 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
         {
             OnRedirectToIdentityProvider = async ctxt =>
             {
-                // Invoked before redirecting to the identity provider to authenticate. This can be used to set ProtocolMessage.State
-                // that will be persisted through the authentication process. The ProtocolMessage can also be used to add or customize
-                // parameters sent to the identity provider
+                // after successful login take customers to their subscription page
+                ctxt.Properties.RedirectUri = "/subscription";
                 await Task.Yield();
             },
             OnAuthenticationFailed = async ctxt =>
