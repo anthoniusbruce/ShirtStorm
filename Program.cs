@@ -3,7 +3,6 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
 using ShirtStorm.Components;
-using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Security.Claims;
 
@@ -48,33 +47,6 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             {
                 ctxt.HttpContext.Response.Redirect(ctxt.Options.SignedOutRedirectUri);
                 ctxt.HandleResponse();
-                await Task.Yield();
-            },
-            OnTicketReceived = async ctxt =>
-            {
-                if (ctxt.Principal != null)
-                {
-                    if (ctxt.Principal.Identity is ClaimsIdentity identity)
-                    {
-                        // these appear to be variables to nowhere, they might be placeholders to make sure the list is visited for each
-                        var colClaims = await ctxt.Principal.Claims.ToDynamicListAsync();
-                        var identityProvider = colClaims.FirstOrDefault(
-                            c => c.Type == "http://schemas.microsoft.com/identity/claims/identityprovider")?.Value;
-                        var objectIdentifier = colClaims.FirstOrDefault(
-                            c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
-                        var emailAddress = colClaims.FirstOrDefault(
-                            c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
-                        var firstName = colClaims.FirstOrDefault(
-                            c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname")?.Value;
-                        var lastName = colClaims.FirstOrDefault(
-                            c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname")?.Value;
-                        var azureB2CFlow = colClaims.FirstOrDefault(
-                            c => c.Type == "http://schemas.microsoft.com/claims/authnclassreference")?.Value;
-                        var authTime = colClaims.FirstOrDefault(c => c.Type == "auth_time")?.Value;
-                        var displayName = colClaims.FirstOrDefault(c => c.Type == "name")?.Value;
-                        var idpAccessToken = colClaims.FirstOrDefault(c => c.Type == "idp_access_token")?.Value;
-                    }
-                }
                 await Task.Yield();
             }
         };
