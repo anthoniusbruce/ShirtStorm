@@ -4,7 +4,6 @@ using Microsoft.Identity.Web.UI;
 using MudBlazor.Services;
 using ShirtStorm.Components;
 using System.Reflection;
-using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 // Read the connection string from the appsettings.json file
