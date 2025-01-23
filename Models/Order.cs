@@ -6,7 +6,9 @@ namespace ShirtStorm.Models
     {
         [Key]
         public Guid Id {  get; set; }
+        [Required]
         public Guid UserId {  get; set; }
-        public required DesignUnit[] DesignUnits {  get; set; }
+        [Required]
+        public DesignUnit[]? DesignUnits {  get; set; }
     }
 }

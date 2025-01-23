@@ -6,8 +6,11 @@ namespace ShirtStorm.Models
     {
         [Key]
         public Guid Id {  get; set; }
-        public required string Brand { get; set; }
-        public required string Model {  get; set; }
-        public required string Size {  get; set; }
+        [Required]
+        public string? Brand { get; set; }
+        [Required]
+        public string? Model {  get; set; }
+        [Required]
+        public string? Size {  get; set; }
     }
 }

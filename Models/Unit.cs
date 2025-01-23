@@ -2,7 +2,9 @@
 {
     public class Unit
     {
-        public Guid SizeId {  get; set; }
-        public Guid AddressId { get; set; }
+        [Required]
+        public Guid? SizeId {  get; set; }
+        [Required]
+        public Guid? AddressId { get; set; }
     }
 }

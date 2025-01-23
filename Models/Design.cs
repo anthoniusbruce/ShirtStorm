@@ -6,10 +6,15 @@ namespace ShirtStorm.Models
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid ImageId { get; set; }
-        public required string Title { get; set; }
-        public required string Description {  get; set; }
+        [Required]
+        public Guid? ImageId { get; set; }
+        [Required]
+        public string? Title { get; set; }
+        [Required]
+        public string? Description {  get; set; }
+        [Required]
         public DateTime? ReleaseDate { get; set; }
+        [Required]
         public bool DisplayOnFrontPage {  get; set; }
     }
 }
