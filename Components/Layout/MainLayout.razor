@@ -19,7 +19,7 @@
 		<MudSpacer />
 		<AuthorizeView>
 			<Authorized>
-				@if (NavigationManager != null && !NavigationManager.Uri.Contains("subscription"))
+				@if (NavigationManager != null && !NavigationManager.Uri.Contains("upcoming"))
 				{
 					<MudLink Href="/upcoming">Upcoming Designs</MudLink>
 				}
