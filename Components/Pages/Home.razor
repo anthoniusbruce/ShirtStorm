@@ -2,6 +2,11 @@
 
 @using Microsoft.AspNetCore.Components.Web
 @using MudBlazor;
+@using ShirtStorm.Dtos
+@using ShirtStorm.Models
+@using ShirtStorm.Shared
+
+@inject ShirtStormDbContext dbContext
 
 <PageTitle>Shirt Storm</PageTitle>
 <MudGrid>
@@ -42,124 +47,59 @@
     </MudItem>
 </MudGrid>
 <MudGrid Class="mt-4">
-    <MudItem xs="3" Style="display:flex;">
-        <MudContainer>
-            <MudImage Fluid="true" Src="images/Coffee.jpg" Alt="It`s coffee, it`s always coffee" Class="rounded-lg" />
-            <MudText Typo="Typo.caption">
-                The inspiration for this shirt comes from our curious cat, Buttercup. As a kitten, while I was watching the 
-                morning news and enjoying my morning coffee, Buttercup would climb up on my lap and sniff my coffee mug. 
-                She would not like what she found in the mug, so she would scrunch her nose and turn away. Finally, one 
-                morning during her ritual I told her, exasperatedly, "It's coffee, it's always coffee!"
-            </MudText>
-        </MudContainer>
-    </MudItem>
-    <MudItem xs="3" Style="display:flex;">
-        <MudContainer>
-            <MudImage Fluid="true" Src="images/ColdNoodles.jpg" Alt="Cold noodles" Class="rounded-lg" />
-            <MudText Typo="Typo.caption">
-                The cold noodles t-shirt came to be during the height of the pandemic. We were doing a lot more cooking at home, 
-                which meant that we were trying new dishes. One new recipe my wife tried was cold noodles. The noodles turned 
-                out great, the whole family loved them. A few days later, our middle child chose to have left over cold noodles 
-                for lunch. He asked us, “how long do you microware the cold noodles for?”. My wife replied, “they’re cold 
-                noodles.” The middle child replied, “I know, how long?” My wife, again, “They’re cold noodles.” Middle child, “I 
-                get that, how long?” After a few more times back and forth, I interjected, “30 seconds!”. The middle child sat 
-                down, took one bite of his warm noodles and said, “oh, I get it now.” And a t-shirt was born.
-            </MudText>
-        </MudContainer>
-    </MudItem>
-    <MudItem xs="3" Style="display:flex;">
-        <MudContainer>
-            <MudImage Fluid="true" Src="images/RTO.jpg" Alt="Return to office, or Who`s cooking fish in the breakroom?" Class="rounded-lg" />
-            <MudText Typo="Typo.caption">
-                This t-shirt had its beginnings when the office mandated a return to office (RTO) after the pandemic. Knowing 
-                that the teams would not want to return, I decided to try to entice them with a t-shirt to come in. As far as 
-                what to put on the t-shirt, obviously, you choose the most annoying thing you can think of about being in an 
-                office with people again. Nothing is worse than microwaving fish in the breakroom.
-            </MudText>
-        </MudContainer>
-    </MudItem>
-    <MudItem xs="3" Style="display:flex;">
-        <MudContainer>
-            <MudImage Fluid="true" Src="images/RunningPayroll.jpg" Alt="Running payroll" Class="rounded-lg" />
-            <MudText Typo="Typo.caption">
-                This t-shirt was my first t-shirt created for my teams at work. The company was hosting a 5k and I was trying to 
-                encourage participation. I offered this t-shirt to those that participated in the 5k. At the time, my group 
-                oversaw payroll software. Someone suggested Running Payroll as the team’s name and that led me to the classing 
-                “running” joke.
-            </MudText>
-        </MudContainer>
-    </MudItem>
-    <MudItem xs="3" Style="display:flex;">
-        <MudContainer>
-            <MudImage Fluid="true" Src="images/GuardiansOfAccountancy.jpg" Alt="Guardians of Accountancy" Class="rounded-lg" />
-            <MudText Typo="Typo.caption">
-                This was the t-shirt we had for our second year of participating in the company sponsored 5k. My team had 
-                expanded to include accounting along with payroll. I took the theme from the Guardians of the Galaxy movie. 
-                This t-shirt seems to attract accountants. I was even asked about where I got it while on the Golden Canyon 
-                trail in Death Valley National Park.
-            </MudText>
-        </MudContainer>
-    </MudItem>
-    <MudItem xs="3" Style="display:flex;">
-        <MudContainer>
-            <MudImage Fluid="true" Src="images/PeaceLove.jpg" Alt="Peace & Love" Class="rounded-lg" />
-            <MudText Typo="Typo.caption">
-                This t-shirt was a birthday gift for my brother. We asked him what he wanted for his birthday and all he would 
-                offer is, “peach and love.” So, we gave him peace and love. We also give him extras to hand out to his friends.
-            </MudText>
-        </MudContainer>
-    </MudItem>
-    <MudItem xs="3" Style="display:flex;">
-        <MudContainer>
-            <MudImage Fluid="true" Src="images/CoronaOdyssey.jpg" Alt="2020:A Corona Odyssey" Class="rounded-lg" />
-            <MudText Typo="Typo.caption">
-                This is another pandemic t-shirt. Our oldest child moved back home from college during the pandemic because 
-                school housing closed down. The oldest child had quite an adjustment to move back in with the parents. It 
-                wasn’t easy for them. I let them know that I knew it wasn’t easy by making a parody t-shirt of 2001: A Space 
-                Odyssey. I took the scene where Dave Bowman needs to get back into Discovery and asks HAL to open the pod bay 
-                doors and replaced Dave with the oldest and the Discovery with me.
-            </MudText>
-        </MudContainer>
-    </MudItem>
-    <MudItem xs="3" Style="display:flex;">
-        <MudContainer>
-            <MudImage Fluid="true" Src="images/Anthropause.jpg" Alt="Anthropause" Class="rounded-lg" />
-            <MudText Typo="Typo.caption">
-                In the first fall and winter of the pandemic, we were frequently meeting outside with family. Also, it was 
-                going to be the first winter in a long time that my parents were not going to head south to Florida for the 
-                winter. We decided to make a hoodie for everyone. My wife found the word “anthropause” to describe the pandemic 
-                shutdowns while doomscrolling. So we added it to a logo on a jacket that we provided family to keep warm in the 
-                long dark winter of the anthropause.
-            </MudText>
-        </MudContainer>
-    </MudItem>
-    <MudItem xs="3" Style="display:flex;">
-        <MudContainer>
-            <MudImage Fluid="true" Src="images/FarewellTR.jpg" Alt="Bad Haiku" Class="rounded-lg" />
-            <MudText Typo="Typo.caption">
-                At my previous employer, I was made redundant. While it’s always difficult to lose your job, I decided to take 
-                the opportunity to make one last t-shirt on my way out. So, I made a terrible haiku (does inspired have 
-                2 syllables or 3?), put it on a t-shirt, made a callback to the fish in the microwave of a previous shirt and 
-                left it for those allies that remained to pass out to everyone.
-            </MudText>
-        </MudContainer>
-    </MudItem>
-    <MudItem xs="3" Style="display:flex;">
-        <MudContainer>
-            <MudImage Fluid="true" Src="images/vacation2019.jpg" Alt="Vacation 2019" Class="rounded-lg" />
-            <MudText Typo="Typo.caption">
-                This was my first family shirt. We were visiting my parents in Florida over Christmas break, and I had hopes 
-                for fun times on the beach. While there was one warm day, the t-shirt proved to be more aspirational.
-            </MudText>
-        </MudContainer>
-    </MudItem>
-    <MudItem xs="3" Style="display:flex;">
-        <MudContainer>
-            <MudImage Fluid="true" Src="images/vacation2020.jpg" Alt="Vacation 2020" Class="rounded-lg" />
-            <MudText Typo="Typo.caption">
-                We visited my parents at Christmas again. This time the apparel was a long-sleeved t-shirt with a hoodie, 
-                influenced by the previous year’s temps.
-            </MudText>
-        </MudContainer>
-    </MudItem>
+    @foreach (var design in designs)
+    {
+        <MudItem xs="3" Style="display:flex;">
+            <MudContainer>
+                <MudImage Fluid="true" Src="@design.ImageSource" Alt="@design.Title" Class="rounded-lg" />
+                <MudText Typo="Typo.caption">
+                    @design.Description
+                </MudText>
+            </MudContainer>
+        </MudItem>
+    }
 </MudGrid>
+
+@code 
+{
+    private List<FrontPageDesignDto> designs = new List<FrontPageDesignDto>();
+    private bool Loading = false;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (!Loading)
+        {
+            try
+            {
+                Loading = true;
+                designs = new List<FrontPageDesignDto>();
+
+                var query = from design in dbContext.Designs
+                            where design.DisplayOnFrontPage == true
+                            join image in dbContext.Images
+                                on design.ImageId equals image.Id
+                            select new { design, image };
+
+                foreach (var item in query)
+                {
+                    var imageSrc = Convert.ToBase64String(item.image.Bytes!);
+                    var imageDataURL = $"data:image/jpeg;base64,{imageSrc}";
+
+                    var dto = new FrontPageDesignDto 
+                    {
+                        Title = item.design.Title!, 
+                        Description = item.design.Description!,
+                        ImageSource = imageDataURL
+                    };
+                    designs.Add(dto);
+                }
+            }
+            finally
+            {
+                Loading = false;
+            }
+        }
+    }
+}
