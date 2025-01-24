@@ -6,15 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Models\Address.cs" />
-    <Compile Remove="Models\DesignUnit.cs" />
-    <Compile Remove="Models\Order.cs" />
-    <Compile Remove="Models\Shirt.cs" />
-    <Compile Remove="Models\ShirtSizes.cs" />
-    <Compile Remove="Models\Unit.cs" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
@@ -31,15 +22,5 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <None Include="Models\Address.cs" />
-    <None Include="Models\DesignUnit.cs" />
-    <None Include="Models\Order.cs" />
-    <None Include="Models\Shirt.cs" />
-    <None Include="Models\ShirtSizes.cs" />
-    <None Include="Models\Unit.cs" />
   </ItemGroup>
 </Project>

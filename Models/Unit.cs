@@ -1,4 +1,6 @@
-﻿namespace ShirtStorm.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ShirtStorm.Models
 {
     public class Unit
     {
