@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ShirtStorm.Models;
+using ShirtStormCommon.Models;
 
 namespace ShirtStorm.Shared
 {
