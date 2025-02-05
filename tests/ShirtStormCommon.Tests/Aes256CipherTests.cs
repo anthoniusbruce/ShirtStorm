@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using Cipher;
+using ShirtStormCommon.Cipher;
 
 namespace ShirtStormCommon.Tests
 {
