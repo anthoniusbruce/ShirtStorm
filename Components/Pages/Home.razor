@@ -1,9 +1,10 @@
 ﻿@page "/"
 
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.EntityFrameworkCore
 @using MudBlazor;
 @using ShirtStorm.Dtos
-@using ShirtStorm.Models
+@using ShirtStormCommon.Models
 @using ShirtStorm.Shared
 
 @inject ShirtStormDbContext dbContext
@@ -63,43 +64,44 @@
 @code 
 {
     private List<FrontPageDesignDto> designs = new List<FrontPageDesignDto>();
-    private bool Loading = false;
+    private bool loading = false;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
-
-        if (!Loading)
+        if (!loading)
         {
             try
             {
-                Loading = true;
+                loading = true;
                 designs = new List<FrontPageDesignDto>();
 
                 var query = from design in dbContext.Designs
                             where design.DisplayOnFrontPage == true
                             join image in dbContext.Images
                                 on design.ImageId equals image.Id
-                            select new { design, image };
+                            select CreateDto(design, image);
 
-                foreach (var item in query)
-                {
-                    var imageSrc = Convert.ToBase64String(item.image.Bytes!);
-                    var imageDataURL = $"data:image/jpeg;base64,{imageSrc}";
-
-                    var dto = new FrontPageDesignDto 
-                    {
-                        Title = item.design.Title!, 
-                        Description = item.design.Description!,
-                        ImageSource = imageDataURL
-                    };
-                    designs.Add(dto);
-                }
+                designs = await query.Select(x => x.Result).ToListAsync();
             }
             finally
             {
-                Loading = false;
+                loading = false;
             }
         }
+    }
+
+    private static async Task<FrontPageDesignDto> CreateDto(Design design, Image image) 
+    {
+        var imageSrc = await Task<string>.Run(() => { return Convert.ToBase64String(image.Bytes!); });
+        var imageDataURL = $"data:image/jpeg;base64,{imageSrc}";
+
+        var dto = new FrontPageDesignDto
+            {
+                Title = design.Title!,
+                Description = design.Description!,
+                ImageSource = imageDataURL
+            };
+
+        return dto;
     }
 }
