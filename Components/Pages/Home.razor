@@ -1,7 +1,6 @@
 ﻿@page "/"
 
 @using Microsoft.AspNetCore.Components.Web
-@using Microsoft.EntityFrameworkCore
 @using MudBlazor;
 @using ShirtStorm.Dtos
 @using ShirtStormCommon.Models
@@ -66,7 +65,7 @@
     private List<FrontPageDesignDto> designs = new List<FrontPageDesignDto>();
     private bool loading = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         if (!loading)
         {
@@ -81,7 +80,7 @@
                                 on design.ImageId equals image.Id
                             select CreateDto(design, image);
 
-                designs = await query.Select(x => x.Result).ToListAsync();
+                designs = query.ToList();
             }
             finally
             {
@@ -90,9 +89,9 @@
         }
     }
 
-    private static async Task<FrontPageDesignDto> CreateDto(Design design, Image image) 
+    private static FrontPageDesignDto CreateDto(Design design, Image image) 
     {
-        var imageSrc = await Task<string>.Run(() => { return Convert.ToBase64String(image.Bytes!); });
+        var imageSrc = Convert.ToBase64String(image.Bytes!);
         var imageDataURL = $"data:image/jpeg;base64,{imageSrc}";
 
         var dto = new FrontPageDesignDto

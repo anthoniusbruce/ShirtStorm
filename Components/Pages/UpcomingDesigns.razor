@@ -44,7 +44,7 @@
                         // add record
                         customer = new Customer { Id = Guid.NewGuid(), IdentityEmail = identityEmail, DisplayName = displayName, Surname = surname, FirstName = firstName, IsAMember = false };
                         dbContext.Add(customer);
-                        await dbContext.SaveChangesAsync();
+                        dbContext.SaveChanges();
                     }
                     else
                     {
@@ -53,7 +53,7 @@
                         customer.Surname = surname;
                         customer.FirstName = firstName;
                         dbContext.Update(customer);
-                        await dbContext.SaveChangesAsync();
+                        dbContext.SaveChanges();
 
                         upcomingDesignsDto.IsAMember = customer.IsAMember;
                     }
