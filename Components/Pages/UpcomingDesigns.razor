@@ -44,7 +44,7 @@
             else 
             {
                 // add record
-                var customer = new Customer { Id = Guid.NewGuid(), IdentityEmail = identityEmail, DisplayName = displayName, Surname = surname, FirstName = firstName };
+                var customer = new Customer { Id = Guid.NewGuid(), IdentityEmail = identityEmail, DisplayName = displayName, Surname = surname, FirstName = firstName, IsAMember = false };
                 dbContext.Add(customer);
                 dbContext.SaveChanges();
             }

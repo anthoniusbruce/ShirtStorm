@@ -4,9 +4,10 @@ namespace ShirtStorm.Models
 {
     public class Unit
     {
-        [Required]
-        public Guid? SizeId {  get; set; }
-        [Required]
-        public Guid? AddressId { get; set; }
+        [Key]
+        public Guid Id { get; set; }
+        public Guid DesignUnitId { get; set; }
+        public Guid SizeId {  get; set; }
+        public Guid AddressId { get; set; }
     }
 }
