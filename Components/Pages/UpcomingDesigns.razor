@@ -1,4 +1,10 @@
 ﻿@page "/upcoming"
+@using System.Security.Claims
+@using ShirtStormCommon.Models
+@using ShirtStorm.Shared
+
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject ShirtStormDbContext dbContext
 
 <PageTitle>Shirt Storm Subscription</PageTitle>
 <MudGrid>
@@ -7,3 +13,42 @@
         <MudImage Fluid="true" Src="images/ShirtStormMasterLogoWithName.JPG" Alt="Shirt Storm!" Class="rounded-lg" />
     </MudItem>
 </MudGrid>
+@code
+{
+    protected override  async Task OnInitializedAsync()
+    {
+        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        ClaimsPrincipal claimsPrincipalUser = authState.User;
+
+        if (claimsPrincipalUser.Identity != null && claimsPrincipalUser.Identity.IsAuthenticated)
+        {
+            var identityEmail = claimsPrincipalUser.FindFirstValue("emails")!;
+            var displayName = claimsPrincipalUser.Identity.Name!;
+            var firstName = claimsPrincipalUser.FindFirstValue(ClaimTypes.GivenName)!;
+            var surname = claimsPrincipalUser.FindFirstValue(ClaimTypes.Surname)!;
+
+            var query = from customer in dbContext.Customers
+                        where customer.IdentityEmail == identityEmail
+                        select customer;
+
+            if (query.Any())
+            {
+                // update record
+                var savedCustomer = query.FirstOrDefault()!;
+                savedCustomer.DisplayName = displayName;
+                savedCustomer.Surname = surname;
+                savedCustomer.FirstName = firstName;
+                dbContext.Update(savedCustomer);
+                dbContext.SaveChanges();
+            }
+            else 
+            {
+                // add record
+                var customer = new Customer { Id = Guid.NewGuid(), IdentityEmail = identityEmail, DisplayName = displayName, Surname = surname, FirstName = firstName };
+                dbContext.Add(customer);
+                dbContext.SaveChanges();
+            }
+
+        }
+    }
+}

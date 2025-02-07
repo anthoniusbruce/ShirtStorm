@@ -11,5 +11,6 @@ namespace ShirtStorm.Shared
 
         public DbSet<Design> Designs { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<Customer> Customers { get; set; }
     }
 }

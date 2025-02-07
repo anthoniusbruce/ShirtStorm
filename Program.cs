@@ -50,11 +50,6 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
                 ctxt.Properties.RedirectUri = "/upcoming";
                 await Task.Yield();
             },
-            OnAuthenticationFailed = async ctxt =>
-            {
-                // Log in failed
-                await Task.Yield();
-            },
             OnSignedOutCallbackRedirect = async ctxt =>
             {
                 ctxt.HttpContext.Response.Redirect(ctxt.Options.SignedOutRedirectUri);
