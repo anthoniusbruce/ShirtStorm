@@ -9,7 +9,7 @@ using ShirtStorm.Components;
 using ShirtStorm.Shared;
 using System.Reflection;
 
-var kvUri = "https://shirt-storm.vault.azure.net/";
+var kvUri = "https://shirt-storm-vault.vault.azure.net/";
 var client = new SecretClient(new Uri(kvUri), new DefaultAzureCredential());
 var secret = await client.GetSecretAsync("appsettingscipher");
 
@@ -55,7 +55,7 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
                 ctxt.HttpContext.Response.Redirect(ctxt.Options.SignedOutRedirectUri);
                 ctxt.HandleResponse();
                 await Task.Yield();
-            }
+            },
         };
     });
 
