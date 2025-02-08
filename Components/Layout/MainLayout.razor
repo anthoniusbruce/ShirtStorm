@@ -19,11 +19,15 @@
 		<MudSpacer />
 		<AuthorizeView>
 			<Authorized>
-				@if (NavigationManager != null && !NavigationManager.Uri.Contains("upcoming"))
+				@if (!NavigationManager!.Uri.Contains("upcoming"))
 				{
 					<MudLink Href="/upcoming">Upcoming Designs</MudLink>
 				}
 				<MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Href="MicrosoftIdentity/Account/SignOut" />
+				@if (NavigationManager!.BaseUri != NavigationManager!.Uri)
+				{
+					<MudIconButton Icon="@Icons.Material.Filled.Home" Color="Color.Inherit" Href="/" />
+				}
 			</Authorized>
 			<NotAuthorized>
 				<MudLink Href="MicrosoftIdentity/Account/SignIn">Sign In or Sign Up</MudLink>
