@@ -14,15 +14,16 @@ var client = new SecretClient(new Uri(kvUri), new DefaultAzureCredential());
 var secret = await client.GetSecretAsync("appsettingscipher");
 
 var builder = WebApplication.CreateBuilder(args);
-if (secret != null)
-{ 
-    // Read the connection string from the appsettings.json file
-    builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-    // Get HostingEnvironment
-    var env = builder.Environment;
-    builder.Configuration.AddJsonFile($"appsettings{env.EnvironmentName}.json", optional: true);
-    builder.Configuration.Decrypt(secret.Value.Value);
-}
+
+if (secret == null)
+    throw new InvalidOperationException();
+
+// Read the connection string from the appsettings.json file
+builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+// Get HostingEnvironment
+var env = builder.Environment;
+builder.Configuration.AddJsonFile($"appsettings{env.EnvironmentName}.json", optional: true);
+builder.Configuration.Decrypt(secret.Value.Value);
 
 builder.Configuration.AddEnvironmentVariables().AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 
@@ -59,7 +60,7 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
         };
     });
 
-if (secret != null && builder.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDbContext<ShirtStormDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 }
