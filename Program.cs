@@ -11,19 +11,16 @@ using System.Reflection;
 
 var kvUri = "https://shirt-storm-vault.vault.azure.net/";
 var client = new SecretClient(new Uri(kvUri), new DefaultAzureCredential());
-var secret = await client.GetSecretAsync("appsettingscipher");
+var appSettingSecret = await client.GetSecretAsync("appsettingscipher");
 
 var builder = WebApplication.CreateBuilder(args);
-
-if (secret == null)
-    throw new InvalidOperationException();
 
 // Read the connection string from the appsettings.json file
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 // Get HostingEnvironment
 var env = builder.Environment;
 builder.Configuration.AddJsonFile($"appsettings{env.EnvironmentName}.json", optional: true);
-builder.Configuration.Decrypt(secret.Value.Value);
+builder.Configuration.Decrypt(appSettingSecret.Value.Value);
 
 builder.Configuration.AddEnvironmentVariables().AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 
@@ -63,6 +60,12 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDbContext<ShirtStormDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
+else
+{
+    var connectionSecret = await client.GetSecretAsync("shirtstormdb");
+    var connectionString = string.Format(builder.Configuration.GetConnectionString("AzureConnection")!, connectionSecret.Value.Value);
+    builder.Services.AddDbContext<ShirtStormDbContext>(options => options.UseSqlServer(connectionString));
 }
 
 builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
