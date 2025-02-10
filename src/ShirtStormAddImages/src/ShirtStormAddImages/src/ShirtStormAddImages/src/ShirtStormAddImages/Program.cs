@@ -1,11 +1,23 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System.Data;
+using Microsoft.Data.SqlClient;
+using static System.Net.Mime.MediaTypeNames;
 
-var localConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ShirtStorm;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ShirtStorm;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+
+var connectionStringFollows = false;
 var files = new List<string>();
 foreach (string arg in args)
 {
-    Console.Write(arg);
-    if (Path.Exists(arg))
+    if (arg == "--connectionstring")
+    {
+        connectionStringFollows |= true;
+    }
+    else if (connectionStringFollows)
+    {
+        connectionString = arg;
+        connectionStringFollows = false;
+    }
+    else if (Path.Exists(arg))
     {
         var fullPath = Path.GetFullPath(arg);
         files.Add(fullPath);
@@ -23,39 +35,43 @@ if (files.Count == 0)
     return;
 }
 
-SqlConnection myConn = new SqlConnection(localConnectionString);
-SqlCommand command = myConn.CreateCommand();
-
-try
+foreach (var imageFile in files)
 {
-    myConn.Open();
 
-    foreach (var imageFile in files)
+    string queryStmt = "INSERT INTO dbo.Images(ID, Bytes) VALUES(@ImageId, @Bytes); INSERT INTO dbo.Designs(Id, Title, ImageId, DisplayOnFrontPage, Description, ReleaseDate) VALUES(@DesignId, @Title, @ImageId, @DisplayOnFrontPage, @Description, @ReleaseDate)";
+
+    using (SqlConnection con = new SqlConnection(connectionString))
+    using (SqlCommand cmd = new SqlCommand(queryStmt, con))
     {
-        command.CommandText =
-        $@"
-            BEGIN TRY
-                BEGIN TRAN
-                    SELECT NEWID();
-                    DECLARE @imageid uniqueidentifier;
-                    SET @imageid = NEWID();
-                    INSERT INTO Images (Id, Bytes) SELECT @imageid, BulkColumn FROM Openrowset(Bulk '{imageFile}', Single_Blob) as img;
-                    INSERT INTO Designs (Id, Title, ImageId, DisplayOnFrontPage, Description, ReleaseDate) VALUES (NEWID(), '{Path.GetFileNameWithoutExtension(imageFile)}', @imageid, 1, '', '12/31/2024 23:59:59.9999999');
-                COMMIT TRAN
-            END TRY
-            BEGIN CATCH
-                IF(@@TRANCOUNT > 0)
-                    ROLLBACK TRAN;
-                THROW;
-            END CATCH";
-        command.ExecuteNonQuery();
+        var imageId = Guid.NewGuid();
+        SqlParameter param = cmd.Parameters.Add("@ImageId", SqlDbType.UniqueIdentifier);
+        param.Value = imageId;
+        var imageBytes = File.ReadAllBytes(imageFile);
+        param = cmd.Parameters.Add("@Bytes", SqlDbType.VarBinary);
+        param.Value = imageBytes;
+        param = cmd.Parameters.Add("@DesignId", SqlDbType.UniqueIdentifier);
+        param.Value = Guid.NewGuid();
+        param = cmd.Parameters.Add("@Title", SqlDbType.NVarChar);
+        param.Value = Path.GetFileNameWithoutExtension(imageFile);
+        param = cmd.Parameters.Add("@DisplayOnFrontPage", SqlDbType.Bit);
+        param.Value = 1;
+        param = cmd.Parameters.Add("@Description", SqlDbType.NVarChar);
+        param.Value = string.Empty;
+        param = cmd.Parameters.Add("@ReleaseDate", SqlDbType.DateTime2);
+        param.Value = new DateTime(2024, 12, 31);
+
+        try
+        {
+            con.Open();
+            cmd.ExecuteNonQuery();
+        }
+        catch (SqlException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            con.Close();
+        }
     }
-}
-catch (SqlException ex)
-{
-    Console.WriteLine(ex.Message);
-}
-finally
-{
-    myConn.Close();
 }
