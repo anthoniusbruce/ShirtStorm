@@ -1,20 +1,19 @@
 ﻿using System.Data;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Microsoft.Data.SqlClient;
 
 var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ShirtStorm;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
-var connectionStringFollows = false;
 var files = new List<string>();
 foreach (string arg in args)
 {
-    if (arg == "--connectionstring")
+    if (arg == "--azure")
     {
-        connectionStringFollows |= true;
-    }
-    else if (connectionStringFollows)
-    {
-        connectionString = arg;
-        connectionStringFollows = false;
+        var kvUri = "https://shirt-storm-vault.vault.azure.net/";
+        var client = new SecretClient(new Uri(kvUri), new DefaultAzureCredential());
+        var secret = client.GetSecret("shirtstormdb");
+        connectionString = $"Server=tcp:shirt-storm-customer.database.windows.net,1433;Initial Catalog=ShirtStorm;Persist Security Info=False;User ID=azureuser;Password={secret.Value.Value};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
     }
     else if (Path.Exists(arg))
     {
