@@ -42,6 +42,16 @@ foreach (var imageFile in files)
     using (SqlConnection con = new SqlConnection(connectionString))
     using (SqlCommand cmd = new SqlCommand(queryStmt, con))
     {
+        var desc = string.Empty;
+        var title = Path.GetFileNameWithoutExtension(imageFile);
+        var textFile = Path.ChangeExtension(imageFile, ".txt");
+        if (Path.Exists(textFile))
+        {
+            using var streamReader = new StreamReader(textFile);
+            title = streamReader.ReadLine();
+            desc = streamReader.ReadToEnd();
+        }
+
         var imageId = Guid.NewGuid();
         SqlParameter param = cmd.Parameters.Add("@ImageId", SqlDbType.UniqueIdentifier);
         param.Value = imageId;
@@ -51,14 +61,11 @@ foreach (var imageFile in files)
         param = cmd.Parameters.Add("@DesignId", SqlDbType.UniqueIdentifier);
         param.Value = Guid.NewGuid();
         param = cmd.Parameters.Add("@Title", SqlDbType.NVarChar);
-        param.Value = Path.GetFileNameWithoutExtension(imageFile);
+        param.Value = title;
         param = cmd.Parameters.Add("@DisplayOnFrontPage", SqlDbType.Bit);
         param.Value = 1;
         param = cmd.Parameters.Add("@Description", SqlDbType.NVarChar);
-        param.Value = string.Empty;
-        var imageText = Path.ChangeExtension(imageFile, ".txt");
-        if (Path.Exists(imageText))
-            param.Value = File.ReadAllText(imageText);
+        param.Value = desc;
         param = cmd.Parameters.Add("@ReleaseDate", SqlDbType.DateTime2);
         param.Value = new DateTime(2024, 12, 31);
 
