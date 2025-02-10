@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
-using static System.Net.Mime.MediaTypeNames;
 
 var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ShirtStorm;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
@@ -57,6 +56,9 @@ foreach (var imageFile in files)
         param.Value = 1;
         param = cmd.Parameters.Add("@Description", SqlDbType.NVarChar);
         param.Value = string.Empty;
+        var imageText = Path.ChangeExtension(imageFile, ".txt");
+        if (Path.Exists(imageText))
+            param.Value = File.ReadAllText(imageText);
         param = cmd.Parameters.Add("@ReleaseDate", SqlDbType.DateTime2);
         param.Value = new DateTime(2024, 12, 31);
 
