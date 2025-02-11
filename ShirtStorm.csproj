@@ -14,14 +14,21 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Identity.Web" Version="3.6.2" />
-    <PackageReference Include="Microsoft.Identity.Web.UI" Version="3.6.2" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="3.7.0" />
+    <PackageReference Include="Microsoft.Identity.Web.UI" Version="3.7.0" />
     <PackageReference Include="MudBlazor" Version="8.2.0" />
-    <PackageReference Include="ShirtStormCommon" Version="1.0.3" />
   </ItemGroup>
 
 
   <ItemGroup>
+    <Folder Include="CommonAssemblies\" />
     <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Reference Include="ShirtStormCommon">
+      <HintPath>CommonAssemblies\ShirtStormCommon.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
