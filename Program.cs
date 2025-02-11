@@ -70,6 +70,8 @@ else
 
 builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -91,5 +93,7 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+app.MapHealthChecks("/health_check");
 
 app.Run();
