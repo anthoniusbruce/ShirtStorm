@@ -1,16 +1,18 @@
 ﻿@page "/Error"
 @layout Layout.EmptyLayout
 @using System.Diagnostics
+@using ShirtStorm.Components.Layout
 
-<PageTitle>Error</PageTitle>
-
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<PageTitle>Shirt Storm</PageTitle>
+<MudThemeProvider />
+<MudMainContent Class="mt-16 pa-4">
+    <Preamble />
+</MudMainContent>
 
 @if (ShowRequestId)
 {
     <p>
-        <strong>Request ID:</strong> <code>@RequestId</code>
+        Request ID: <code>@RequestId</code>
     </p>
 }
 
