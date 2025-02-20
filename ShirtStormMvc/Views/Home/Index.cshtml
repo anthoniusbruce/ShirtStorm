@@ -1,38 +1,11 @@
-﻿@model List<ShirtStormMvc.Dtos.FrontPageDesignDto>
+﻿@using ShirtStormMvc.Views.Shared
+@model List<ShirtStormMvc.Dtos.FrontPageDesignDto>
 
 @{
     ViewData["Title"] = "Home";
 }
 
-<div class="preamble-row">
-    <div class="preamble-column">
-        <h1>Welcome to Shirt Storm!</h1>
-        <p>Where the forecast is always funny, and the wardrobe is predictably unpredictable.</p>
-        <p>
-            Each month, we deliver a fresh, screen-printed T-shirt right to your doorstep. The designs?
-            They’re as unexpected as finding the Fresh Prince at the end of a set of fresh prints — off-beat, quirky, and occasionally
-            requiring a flow chart to explain (don’t worry, we’ll provide one).
-        </p>
-
-        <ul>
-            <b>Here`s how it works:</b>
-            <li>
-                <img src="images/tornadobulletpointsmall.jpg" /> <b>Stay or sway:</b> Opt-out, change your size, or add extra shirts—monthly.
-            </li>
-            <li>
-                <img src="images/tornadobulletpointsmall.jpg" /> <b>Express yourself:</b> Wear designs that turn heads, spark laughter, or provoke deep, confused thoughts.
-            </li>
-            <li>
-                <img src="images/tornadobulletpointsmall.jpg" /> <b>No wrong choices:</b> Whether you love it or need to gift it to that one eccentric friend, Shirt Storm is here to spark joy (or perplexity).
-            </li>
-        </ul>
-        <p>Take a peek at some of our past designs below and get ready to weather the storm… one shirt at a time!<img src="images/thunderstormbulletpointsmall.jpg" /></p>
-    </div>
-    <div class="preamble-logo-column">
-        <img src="images/ShirtStormMasterLogoWithName.JPG" alt="Shirt Storm!" />
-    </div>
-</div>
-
+<component type="typeof(Preamble)" render-mode="ServerPrerendered" />
 
 <div class="designs-row">
     @for (int i = 0; i < Model.Count(); ++i)
