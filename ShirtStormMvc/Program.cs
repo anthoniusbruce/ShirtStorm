@@ -1,8 +1,10 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using ShirtStormMvc.Database;
 using ShirtStormMvc.Extensions;
 
 // get key to appsetttings encryption
@@ -38,6 +40,17 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             },
         };
     });
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<ShirtStormDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
+else
+{
+    var connectionSecret = await client.GetSecretAsync("shirtstormdb");
+    var connectionString = string.Format(builder.Configuration.GetConnectionString("AzureConnection")!, connectionSecret.Value.Value);
+    builder.Services.AddDbContext<ShirtStormDbContext>(options => options.UseSqlServer(connectionString));
+}
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();

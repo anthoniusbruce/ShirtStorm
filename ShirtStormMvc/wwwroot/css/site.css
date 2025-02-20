@@ -26,6 +26,36 @@ body {
     margin-bottom: 60px;
 }
 
+.preamble-row {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    padding: 0 4px;
+}
+
+.preamble-column {
+    flex: 75%;
+    max-width: 75%;
+    padding: 0 4px;
+}
+
+.preamble-logo-column {
+    flex: 25%;
+    max-width: 25%;
+    padding: 0 4px;
+}
+
+.designs-row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4px;
+}
+
+.designs-column {
+    flex: 16.6666%;
+    max-width: 16.6666%;
+    padding: 0 4px;
+}
+
 .grid-container {
     display: grid;
     grid-template-areas:
