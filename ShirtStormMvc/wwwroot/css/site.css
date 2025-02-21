@@ -35,7 +35,7 @@ body {
 
 .preamble-column {
     flex: 67%;
-    max-width: 67%;
+    max-width: 90%;
     padding: 4px 4px 4px 10px;
     border: 2px solid #808080;
 }
@@ -64,6 +64,7 @@ body {
 
 .preamble-logo-column {
     flex: 33%;
+    min-width: 200px;
     max-width: 33%;
     padding: 0 4px;
     vertical-align: top;
@@ -83,6 +84,7 @@ body {
 
 .designs-column {
     flex: 25%;
+    min-width: 200px;
     max-width: 25%;
     padding-right: 2em;
 }
