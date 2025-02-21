@@ -33,6 +33,10 @@
                             <li class="nav-item">
                                 @if (User.Identity?.IsAuthenticated == true)
                                 {
+                                    if (!Context.Request.Path.ToString().Contains("Upcoming"))
+                                    {
+                                        <span style="padding-right:1em;"><a asp-area="" asp-controller="Home" asp-action="UpcomingDesigns">Upcoming</a></span>
+                                    }
                                     <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Logout</a>
                                 }
                                 else

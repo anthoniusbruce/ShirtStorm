@@ -1,0 +1,23 @@
+﻿@using ShirtStormMvc.Views.Shared
+@using ShirtStormMvc.Dtos
+@model UpcomingDesignsDto
+
+@{
+    ViewData["Title"] = "Upcoming";
+}
+
+@if (Model.IsAMember)
+{
+    <div class="preamble-row">
+        <div class="preamble-column">
+            <h1>Future home of an address grid! IsMember:@Model.IsAMember</h1>
+        </div>
+        <div class="preamble-logo-column">
+            <img src="/images/ShirtStormMasterLogoWithName.JPG" alt="Shirt Storm!" />
+        </div>
+    </div>
+}
+else
+{
+    <component type="typeof(Preamble)" render-mode="ServerPrerendered" />
+}

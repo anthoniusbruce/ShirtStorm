@@ -1,5 +1,9 @@
 using System.Diagnostics;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShirtStormCommon.Models;
 using ShirtStormMvc.Database;
 using ShirtStormMvc.Dtos;
@@ -31,6 +35,43 @@ public class HomeController : Controller
         designs = query.ToList();
 
         return View(designs);
+    }
+
+    [Authorize]
+    public async Task<IActionResult> UpcomingDesignsAsync()
+    {
+        var upcoming = new UpcomingDesignsDto();
+
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            var identityEmail = User.FindFirstValue("emails")!;
+            var displayName = User.Identity.Name!;
+            var firstName = User.FindFirstValue(ClaimTypes.GivenName)!;
+            var surname = User.FindFirstValue(ClaimTypes.Surname)!;
+
+            var customer = await(_dbContext.Customers.Where(s => s.IdentityEmail == identityEmail).FirstOrDefaultAsync<Customer>());
+
+            if (customer == null)
+            {
+                // add record
+                customer = new Customer { Id = Guid.NewGuid(), IdentityEmail = identityEmail, DisplayName = displayName, Surname = surname, FirstName = firstName, IsAMember = false };
+                _dbContext.Add(customer);
+                _dbContext.SaveChanges();
+            }
+            else
+            {
+                // update record
+                customer.DisplayName = displayName;
+                customer.Surname = surname;
+                customer.FirstName = firstName;
+                _dbContext.Update(customer);
+                _dbContext.SaveChanges();
+
+                upcoming.IsAMember = customer.IsAMember;
+            }
+        }
+
+        return View(upcoming);
     }
 
     public IActionResult Privacy()
