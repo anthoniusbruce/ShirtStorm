@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# vs code
+*/.vscode
+ShirtStorm/ShirtStorm.sln
+ShirtStormMvc/ShirtStormMvc.sln

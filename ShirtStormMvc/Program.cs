@@ -7,12 +7,12 @@ using Microsoft.Identity.Web.UI;
 using ShirtStormMvc.Database;
 using ShirtStormMvc.Extensions;
 
+var builder = WebApplication.CreateBuilder(args);
+
 // get key to appsetttings encryption
 var kvUri = "https://shirt-storm-vault.vault.azure.net/";
 var client = new SecretClient(new Uri(kvUri), new DefaultAzureCredential());
 var appSettingSecret = await client.GetSecretAsync("appsettingscipher");
-
-var builder = WebApplication.CreateBuilder(args);
 
 // ready the appsettings file
 // Read the connection string from the appsettings.json file
