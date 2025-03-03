@@ -2,6 +2,7 @@ using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using ShirtStormMvc.Database;
@@ -41,15 +42,23 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
         };
     });
 
+var retryStrategy = new Action<SqlServerDbContextOptionsBuilder>(
+    sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+        maxRetryCount: 10,
+        maxRetryDelay: TimeSpan.FromSeconds(30),
+        errorNumbersToAdd: null);
+    });
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddDbContext<ShirtStormDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    builder.Services.AddDbContext<ShirtStormDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), retryStrategy));
 }
 else
 {
     var connectionSecret = await client.GetSecretAsync("shirtstormdb");
     var connectionString = string.Format(builder.Configuration.GetConnectionString("AzureConnection")!, connectionSecret.Value.Value);
-    builder.Services.AddDbContext<ShirtStormDbContext>(options => options.UseSqlServer(connectionString));
+    builder.Services.AddDbContext<ShirtStormDbContext>(options => options.UseSqlServer(connectionString, retryStrategy));
 }
 
 // Add services to the container.

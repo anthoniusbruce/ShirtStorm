@@ -22,9 +22,9 @@ public class HomeController : Controller
         _dbContext = dbContext;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var designs = new List<FrontPageDesignDto>();
+        //        var designs = new List<FrontPageDesignDto>();
 
         var query = from design in _dbContext.Designs
                     where design.DisplayOnFrontPage == true
@@ -32,9 +32,9 @@ public class HomeController : Controller
                         on design.ImageId equals image.Id
                     select CreateDto(design, image);
 
-        designs = query.ToList();
+        var designs = query.ToListAsync();
 
-        return View(designs);
+        return View(await designs);
     }
 
     [Authorize]
@@ -49,7 +49,7 @@ public class HomeController : Controller
             var firstName = User.FindFirstValue(ClaimTypes.GivenName)!;
             var surname = User.FindFirstValue(ClaimTypes.Surname)!;
 
-            var customer = await(_dbContext.Customers.Where(s => s.IdentityEmail == identityEmail).FirstOrDefaultAsync<Customer>());
+            var customer = await (_dbContext.Customers.Where(s => s.IdentityEmail == identityEmail).FirstOrDefaultAsync<Customer>());
 
             if (customer == null)
             {
