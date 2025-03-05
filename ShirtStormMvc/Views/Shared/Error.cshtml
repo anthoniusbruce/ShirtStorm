@@ -1,11 +1,10 @@
-﻿@using ShirtStormMvc.Views.Shared
-@model ErrorViewModel
+﻿@model ErrorViewModel
 @{
     ViewData["Title"] = "Error";
     Layout = "EmptyLayout";
 }
 
-<component type="typeof(Preamble)" render-mode="ServerPrerendered" />
+@await Component.InvokeAsync("Preamble")
 
 @if (Model.ShowRequestId)
 {

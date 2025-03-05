@@ -1,5 +1,4 @@
-﻿@using ShirtStormMvc.Views.Shared
-@using ShirtStormMvc.Dtos
+﻿@using ShirtStormMvc.Dtos
 @model UpcomingDesignsDto
 
 @{
@@ -19,5 +18,5 @@
 }
 else
 {
-    <component type="typeof(Preamble)" render-mode="ServerPrerendered" />
+    @await Component.InvokeAsync("Preamble")
 }
