@@ -19,7 +19,7 @@ namespace ShirtStormMvc.ViewComponents
         }
 
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             var query = from design in _dbContext.Designs
                         where design.DisplayOnFrontPage == true
@@ -27,9 +27,9 @@ namespace ShirtStormMvc.ViewComponents
                             on design.ImageId equals image.Id
                         select CreateDto(design, image);
 
-            var designs = query.ToList();
+            var designs = query.ToListAsync();
 
-            return View(designs);
+            return View(await designs);
         }
 
         private static FrontPageDesignDto CreateDto(Design design, Image image)
