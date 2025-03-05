@@ -21,19 +21,9 @@ public class HomeController : Controller
         _dbContext = dbContext;
     }
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-        //        var designs = new List<FrontPageDesignDto>();
-
-        var query = from design in _dbContext.Designs
-                    where design.DisplayOnFrontPage == true
-                    join image in _dbContext.Images
-                        on design.ImageId equals image.Id
-                    select CreateDto(design, image);
-
-        var designs = query.ToListAsync();
-
-        return View(await designs);
+        return View();
     }
 
     [Authorize]
@@ -82,20 +72,5 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
-
-    private static FrontPageDesignDto CreateDto(Design design, Image image)
-    {
-        var imageSrc = Convert.ToBase64String(image.Bytes!);
-        var imageDataURL = $"data:image/jpeg;base64,{imageSrc}";
-
-        var dto = new FrontPageDesignDto
-        {
-            Title = design.Title!,
-            Description = design.Description!,
-            ImageSource = imageDataURL
-        };
-
-        return dto;
     }
 }
