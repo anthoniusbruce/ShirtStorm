@@ -4,4 +4,28 @@
 
 @await Component.InvokeAsync("Preamble")
 
-@await Component.InvokeAsync("FrontPageList")
+<div id="front-page-list">
+    Loading designs...
+</div>
+
+<script type="text/javascript">
+    var callback = function() {
+        // do loading
+        $.ajax({
+            url: '@Url.Action("LoadFrontPageList", "Home")',
+            type: 'GET',
+            success: function (data) {
+                $('#front-page-list').html(data);
+            },
+            error: function() {
+                $('#front-page-list').html("Sorry! Designs are not available at this time. :(");
+            }
+        });
+    };
+
+    if (document.readyState === "complete") {
+        callback();
+    } else {
+        document.addEventListener("DOMContentLoaded", callback);
+    }
+</script>

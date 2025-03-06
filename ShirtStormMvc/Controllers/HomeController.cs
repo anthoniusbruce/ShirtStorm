@@ -26,6 +26,11 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult LoadFrontPageList()
+    {
+        return ViewComponent("FrontPageList");
+    }
+
     [Authorize]
     public async Task<IActionResult> UpcomingDesignsAsync()
     {
