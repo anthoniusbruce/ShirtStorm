@@ -11,7 +11,7 @@ using ShirtStormMvc.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 // get key to appsetttings encryption
-var kvUri = "https://shirt-storm-vault.vault.azure.net/";
+var kvUri = "https://shirt-storm-vaults.vault.azure.net/";
 var client = new SecretClient(new Uri(kvUri), new DefaultAzureCredential());
 var appSettingSecret = await client.GetSecretAsync("appsettingscipher");
 
