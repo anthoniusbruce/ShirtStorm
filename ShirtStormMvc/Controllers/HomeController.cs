@@ -10,6 +10,7 @@ using ShirtStormMvc.Models;
 
 namespace ShirtStormMvc.Controllers;
 
+[AutoValidateAntiforgeryToken]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
