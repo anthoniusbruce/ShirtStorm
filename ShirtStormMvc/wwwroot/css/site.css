@@ -76,6 +76,15 @@ body {
         object-fit: contain;
     }
 
+.address-table {
+    overflow-y: auto;
+    height: 200px;
+}
+.address-table thead th {
+    position: sticky;
+    top: 0px;
+}
+
 .designs-row {
     display: flex;
     flex-wrap: wrap;

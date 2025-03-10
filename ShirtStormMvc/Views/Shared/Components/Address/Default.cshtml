@@ -1,3 +1,24 @@
-﻿<div>
-	Hello you! this is a place for the new address view!
+﻿@model List<ShirtStormMvc.Dtos.AddressDto>
+<h1>Destinations!</h1>
+<p>Start by adding your shipping address below. We will keep track of the addresses you use. If a design does not fit you, but you know someone whom it does, send it their way! Just add their address below and select the address as a destination of the design.</p>
+<div class="col-sm-12 address-table">
+	<table class="table">
+		<tr>
+			<th>Alias</th>
+			<th>Recipient</th>
+			<th>Street</th>
+			<th>C/S/Z</th>
+			<th><a href="">Add</a></th>
+		</tr>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@Html.DisplayFor(modelItem => item.Alias)</td>
+				<td>@Html.DisplayFor(modelItem => item.Recipient)</td>
+				<td>@Html.DisplayFor(modelItem => item.StreetAddress1) @Html.DisplayFor(modelItem => item.StreetAddress2)</td>
+				<td>@Html.DisplayFor(modelItem => item.CityStateZip)</td>
+				<td><a href="">Edit</a> | <a asp-action="AddressDelete" asp-route-id="@item.Id">Delete</a></td>
+			</tr>
+		}
+	</table>
 </div>

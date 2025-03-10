@@ -72,6 +72,14 @@ public class HomeController : Controller
     [Authorize]
     public IActionResult AddressViewCrud()
     {
+        var identityEmail = string.Empty;
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            identityEmail = User.FindFirstValue("emails");
+        }
+
+        ViewData["identityEmail"] = identityEmail;
+
         return ViewComponent("Address");
     }
 
