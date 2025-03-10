@@ -27,7 +27,7 @@ else
     var callback = function() {
         // do loading
         $.ajax({
-            url: '@Url.Action("AddressViewCrud", "Home")',
+            url: '@Url.Action("AddressViewCrud", "UpcomingDesigns")',
             type: 'GET',
             success: function (data) {
                 $('#address-space').html(data);
