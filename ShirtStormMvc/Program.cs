@@ -30,7 +30,7 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             OnRedirectToIdentityProvider = async ctxt =>
             {
                 // after successful login take customers to their subscription page
-                ctxt.Properties.RedirectUri = "/Home/UpcomingDesigns";
+                ctxt.Properties.RedirectUri = "/UpcomingDesigns";
                 await Task.Yield();
             },
             OnSignedOutCallbackRedirect = async ctxt =>

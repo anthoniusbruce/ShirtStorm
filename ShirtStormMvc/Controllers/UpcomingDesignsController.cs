@@ -8,6 +8,7 @@ using ShirtStormMvc.Database;
 
 namespace ShirtStormMvc.Controllers
 {
+    [Authorize]
     public class UpcomingDesignsController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -26,7 +27,6 @@ namespace ShirtStormMvc.Controllers
             _dbContext = dbContext;
         }
 
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             var upcoming = new UpcomingDesignsDto();
@@ -63,7 +63,6 @@ namespace ShirtStormMvc.Controllers
             return View(upcoming);
         }
 
-        [Authorize]
         public IActionResult AddressViewCrud()
         {
             var identityEmail = string.Empty;
@@ -81,7 +80,6 @@ namespace ShirtStormMvc.Controllers
             return ViewComponent("Address", addresses);
         }
 
-        [Authorize]
         public IActionResult AddressDelete(Guid id)
         {
             _addresses!.RemoveAll(x => x.Id == id);
