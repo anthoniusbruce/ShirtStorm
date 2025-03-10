@@ -9,7 +9,9 @@
 {
     <div class="preamble-row">
         <div class="preamble-column">
-            <h1>Future home of an address grid! IsMember:@Model.IsAMember</h1>
+            <div id="address-space">
+                Loading address form...
+            </div>
         </div>
         <div class="preamble-logo-column">
             <img src="/images/ShirtStormMasterLogoWithName.JPG" alt="Shirt Storm!" />
@@ -20,3 +22,25 @@ else
 {
     @await Component.InvokeAsync("Preamble")
 }
+
+<script type="text/javascript">
+    var callback = function() {
+        // do loading
+        $.ajax({
+            url: '@Url.Action("AddressViewCrud", "Home")',
+            type: 'GET',
+            success: function (data) {
+                $('#address-space').html(data);
+            },
+            error: function() {
+                $('#address-space').html("Sorry! Addresses are not available at this time. :(");
+            }
+        });
+    };
+
+    if (document.readyState === "complete") {
+        callback();
+    } else {
+        document.addEventListener("DOMContentLoaded", callback);
+    }
+</script>

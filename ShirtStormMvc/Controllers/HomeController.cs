@@ -69,6 +69,12 @@ public class HomeController : Controller
         return View(upcoming);
     }
 
+    [Authorize]
+    public IActionResult AddressViewCrud()
+    {
+        return ViewComponent("Address");
+    }
+
     public IActionResult Privacy()
     {
         return View();
