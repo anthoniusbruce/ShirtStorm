@@ -15,6 +15,13 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly ShirtStormDbContext _dbContext;
+    private static List<AddressDto> _addresses = new List<AddressDto>
+    {
+        new AddressDto {Id = Guid.NewGuid(), Alias = "Home", Recipient="Andy Collins", StreetAddress1="46594 Gunnery Drive", CityStateZip="Canton, MI 48487" },
+        new AddressDto {Id = Guid.NewGuid(), Alias = "Home2", Recipient="Jennifer Collins", StreetAddress1="46594 Gunnery DR", CityStateZip="Canton MI 48487" },
+        new AddressDto {Id = Guid.NewGuid(), Alias = "Cape", Recipient="Alex Collins", StreetAddress1="103 International Drive", StreetAddress2="Apt 803", CityStateZip="Cape Canaveral, FL 99088" },
+        new AddressDto {Id = Guid.NewGuid(), Alias = "WH", Recipient="John Collins", StreetAddress1="1600 Pennsylvania Avenue", CityStateZip="Washington, DC 10001" },
+    };
 
     public HomeController(ILogger<HomeController> logger, ShirtStormDbContext dbContext)
     {
@@ -80,7 +87,14 @@ public class HomeController : Controller
 
         ViewData["identityEmail"] = identityEmail;
 
-        return ViewComponent("Address");
+        return ViewComponent("Address", _addresses);
+    }
+
+    [Authorize]
+    public IActionResult AddressDelete(Guid id)
+    {
+        _addresses!.RemoveAll(x => x.Id == id);
+        return RedirectToAction("UpcomingDesigns");
     }
 
     public IActionResult Privacy()
