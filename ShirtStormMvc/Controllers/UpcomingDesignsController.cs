@@ -9,17 +9,12 @@ using ShirtStormMvc.Database;
 namespace ShirtStormMvc.Controllers
 {
     [Authorize]
+    [AutoValidateAntiforgeryToken]
     public class UpcomingDesignsController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ShirtStormDbContext _dbContext;
-        private static List<AddressDto> _addresses = new List<AddressDto>
-        {
-        new AddressDto {Id = Guid.NewGuid(), Alias = "Home", Recipient="Andy Collins", StreetAddress1="46594 Gunnery Drive", CityStateZip="Canton, MI 48487" },
-        new AddressDto {Id = Guid.NewGuid(), Alias = "Home2", Recipient="Jennifer Collins", StreetAddress1="46594 Gunnery DR", CityStateZip="Canton MI 48487" },
-        new AddressDto {Id = Guid.NewGuid(), Alias = "Cape", Recipient="Alex Collins", StreetAddress1="103 International Drive", StreetAddress2="Apt 803", CityStateZip="Cape Canaveral, FL 99088" },
-        new AddressDto {Id = Guid.NewGuid(), Alias = "WH", Recipient="John Collins", StreetAddress1="1600 Pennsylvania Avenue", CityStateZip="Washington, DC 10001" },
-        };
+        private static List<AddressDto> _addresses = new List<AddressDto>();
 
         public UpcomingDesignsController(ILogger<HomeController> logger, ShirtStormDbContext dbContext)
         {
@@ -75,14 +70,57 @@ namespace ShirtStormMvc.Controllers
 
             var addresses = new List<AddressDto>();
 
-            //addresses = _addresses;
+            addresses = _addresses;
 
             return ViewComponent("Address", addresses);
+        }
+
+        public IActionResult AddressUpdateBlock(Guid? id)
+        {
+            AddressDto addressDto;
+            if (id.HasValue && _addresses.Exists(x => x.Id == id))
+            {
+                addressDto = _addresses.Find(x => x.Id == id)!;
+            }
+            else
+            {
+                addressDto = new AddressDto() { Alias = string.Empty, CityStateZip = string.Empty, Recipient = string.Empty, StreetAddress1 = string.Empty, Id = Guid.NewGuid() };
+            }
+
+            return ViewComponent("AddressUpdateBlock", addressDto);
+        }
+
+        [HttpPost]
+        public IActionResult AddressUpdateBlock(AddressDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(Index), dto);
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.Alias))
+                dto.Alias = dto.Recipient;
+            if (_addresses.Exists(x => x.Id == dto.Id))
+            {
+                var index = _addresses.FindIndex(x => x.Id == dto.Id);
+                _addresses[index] = dto;
+            }
+            else
+            {
+                _addresses.Add(dto!);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult AddressDelete(Guid id)
         {
             _addresses!.RemoveAll(x => x.Id == id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Cancel()
+        {
             return RedirectToAction(nameof(Index));
         }
     }

@@ -1,14 +1,14 @@
 ﻿@model List<ShirtStormMvc.Dtos.AddressDto>
 <h1>Destinations!</h1>
 <p>Start by adding your shipping address below. We will keep track of the addresses you use. If a design does not fit you, but you know someone whom it does, send it their way! Just add their address below and select the address as a destination of the design.</p>
-<div class="col-sm-12 address-table">
+<div class="col-sm-12 address-table" id="address-control-replacement">
 	<table class="table">
 		<tr>
 			<th>Alias</th>
 			<th>Recipient</th>
 			<th>Street</th>
 			<th>C/S/Z</th>
-			<th><a href="">Add</a></th>
+			<th><a href="#" onclick="addressUpdateBlock();">Add</a></th>
 		</tr>
 		@foreach (var item in Model)
 		{
@@ -17,8 +17,27 @@
 				<td>@Html.DisplayFor(modelItem => item.Recipient)</td>
 				<td>@Html.DisplayFor(modelItem => item.StreetAddress1) @Html.DisplayFor(modelItem => item.StreetAddress2)</td>
 				<td>@Html.DisplayFor(modelItem => item.CityStateZip)</td>
-				<td><a href="">Edit</a> | <a asp-controller="UpcomingDesigns" asp-action="AddressDelete" asp-route-id="@item.Id">Delete</a></td>
+				<td><a href="#" onclick="addressUpdateBlock('@item.Id');">Edit</a> | <a asp-controller="UpcomingDesigns" asp-action="AddressDelete" asp-route-id="@item.Id">Delete</a></td>
 			</tr>
 		}
 	</table>
 </div>
+
+<script type="text/javascript">
+	var addressUpdateBlock = function(itemId) {
+		// do loading
+		$.ajax({
+			url: '@Url.Action("AddressUpdateBlock", "UpcomingDesigns")',
+			type: 'GET',
+			data: {
+				id: itemId
+			},
+			success: function (data) {
+				$('#address-control-replacement').html(data);
+			},
+			error: function() {
+				$('#address-control-replacement').html("Sorry! Addresses are not available at this time. :(");
+			}
+		});
+	};
+</script>

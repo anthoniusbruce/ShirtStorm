@@ -1,0 +1,53 @@
+﻿@using System.ComponentModel.DataAnnotations
+@model ShirtStormMvc.Dtos.AddressDto
+
+<div class="data-entry col-sm-11">
+	<form asp-controller="UpcomingDesigns" asp-action="AddressUpdateBlock" method="post" enctype="multipart/form-data">
+		@Html.AntiForgeryToken()
+		<input asp-for="@Model.Id" />
+		<div class="address-create-edit-row">
+			<div class="address-create-edit-field">
+			<input asp-for="@Model.Recipient" placeholder="Recipient (required)" class="form-control" />
+			</div>
+			<div class="address-create-edit-error">
+			<span asp-validation-for="@Model.Recipient" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="address-create-edit-row">
+			<div class="address-create-edit-field">
+				<input asp-for="@Model.StreetAddress1" placeholder="Street Address 1 (required)" class="form-control" />
+			</div>
+			<div class="address-create-edit-error">
+				<span asp-validation-for="@Model.StreetAddress1" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="address-create-edit-row">
+			<div class="address-create-edit-field">
+				<input asp-for="@Model.StreetAddress2" placeholder="Street Address 2" class="form-control" />
+			</div>
+			<div class="address-create-edit-error">
+				<span asp-validation-for="@Model.StreetAddress2" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="address-create-edit-row">
+			<div class="address-create-edit-field">
+				<input asp-for="@Model.CityStateZip" placeholder="City, State Zip (required)" class="form-control" />
+			</div>
+			<div class="address-create-edit-error">
+				<span asp-validation-for="@Model.CityStateZip" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="address-create-edit-row">
+			<div class="address-create-edit-field">
+				<input asp-for="@Model.Alias" placeholder="Display Alias, i.e. Home or Mom and Dad's'" class="form-control" />
+			</div>
+			<div class="address-create-edit-error">
+				<span asp-validation-for="@Model.Alias" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="far-right">
+			<a class="btn btn-default" asp-controller="UpcomingDesigns" asp-action="Cancel">Cancel</a>
+			<button class="btn btn-success relative" id="btnSubmit" type="submit">Submit</button>
+		</div>
+	</form>
+</div>
