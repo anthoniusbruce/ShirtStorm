@@ -14,7 +14,6 @@ namespace ShirtStormMvc.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ShirtStormDbContext _dbContext;
-        private static List<AddressDto> _addresses = new List<AddressDto>();
 
         public UpcomingDesignsController(ILogger<HomeController> logger, ShirtStormDbContext dbContext)
         {
@@ -58,40 +57,67 @@ namespace ShirtStormMvc.Controllers
             return View(upcoming);
         }
 
-        public IActionResult AddressViewCrud()
+        public async Task<IActionResult> AddressViewCrud()
         {
-            var identityEmail = string.Empty;
-            if (User.Identity != null && User.Identity.IsAuthenticated)
+            var customerId = await GetCustomerId();
+            var addresses = await _dbContext.Addresses.Where(a => a.CustomerGuid == customerId).ToListAsync()!;
+
+            var addressDtos = new List<AddressDto>();
+
+            foreach (var address in addresses??new List<Address>())
             {
-                identityEmail = User.FindFirstValue("emails");
+                addressDtos.Add(new AddressDto
+                {
+                    Id = address.Id,
+                    Recipient = address.Recipient ?? string.Empty,
+                    StreetAddress1 = address.StreetAddress1 ?? string.Empty,
+                    StreetAddress2 = address.StreetAddress2,
+                    CityStateZip = address.CityStateZip ?? string.Empty,
+                    Alias = address.Alias
+                });
             }
 
-            ViewData["identityEmail"] = identityEmail;
-
-            var addresses = new List<AddressDto>();
-
-            addresses = _addresses;
-
-            return ViewComponent("Address", addresses);
+            return ViewComponent("Address", addressDtos);
         }
 
-        public IActionResult AddressUpdateBlock(Guid? id)
+        public async Task<IActionResult> AddressUpdateBlock(Guid? id)
         {
-            AddressDto addressDto;
-            if (id.HasValue && _addresses.Exists(x => x.Id == id))
+            AddressDto? addressDto = null;
+            if (id.HasValue)
             {
-                addressDto = _addresses.Find(x => x.Id == id)!;
+                var address = await GetAddress(id);
+                if (address != null)
+                {
+                    addressDto = new AddressDto()
+                    {
+                        Id = address.Id,
+                        Alias = address.Alias,
+                        Recipient = address.Recipient ?? string.Empty,
+                        StreetAddress1 = address.StreetAddress1 ?? string.Empty,
+                        StreetAddress2 = address.StreetAddress2,
+                        CityStateZip = address.CityStateZip ?? string.Empty
+                    };
+                }
             }
-            else
+
+            if (addressDto == null)
             {
-                addressDto = new AddressDto() { Alias = string.Empty, CityStateZip = string.Empty, Recipient = string.Empty, StreetAddress1 = string.Empty, Id = Guid.NewGuid() };
+                addressDto = new AddressDto() 
+                { 
+                    Alias = string.Empty, 
+                    CityStateZip = string.Empty, 
+                    Recipient = string.Empty,
+                    StreetAddress1 = string.Empty,
+                    StreetAddress2 = string.Empty, 
+                    Id = Guid.NewGuid() 
+                };
             }
 
             return ViewComponent("AddressUpdateBlock", addressDto);
         }
 
         [HttpPost]
-        public IActionResult AddressUpdateBlock(AddressDto dto)
+        public async Task<IActionResult> AddressUpdateBlock(AddressDto dto)
         {
             if (!ModelState.IsValid)
             {
@@ -100,22 +126,46 @@ namespace ShirtStormMvc.Controllers
 
             if (string.IsNullOrWhiteSpace(dto.Alias))
                 dto.Alias = dto.Recipient;
-            if (_addresses.Exists(x => x.Id == dto.Id))
+
+            var address = await GetAddress(dto.Id);
+
+            if (address == null)
             {
-                var index = _addresses.FindIndex(x => x.Id == dto.Id);
-                _addresses[index] = dto;
+                _dbContext.Add(new Address
+                {
+                    Id = dto.Id,
+                    CustomerGuid = await GetCustomerId(),
+                    Alias = dto.Alias,
+                    Recipient = dto.Recipient,
+                    StreetAddress1 = dto.StreetAddress1,
+                    StreetAddress2 = dto.StreetAddress2,
+                    CityStateZip = dto.CityStateZip
+                });
+                await _dbContext.SaveChangesAsync();
             }
             else
             {
-                _addresses.Add(dto!);
+                address.Alias = dto.Alias;
+                address.Recipient = dto.Recipient;
+                address.StreetAddress1 = dto.StreetAddress1;
+                address.StreetAddress2 = dto.StreetAddress2;
+                address.CityStateZip = dto.CityStateZip;
+                _dbContext.Update(address);
+                await _dbContext.SaveChangesAsync();
             }
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult AddressDelete(Guid id)
+        public async Task<IActionResult> AddressDelete(Guid id)
         {
-            _addresses!.RemoveAll(x => x.Id == id);
+            var address = await GetAddress(id);
+            if (address != null)
+            {
+                _dbContext.Remove(address);
+                await _dbContext.SaveChangesAsync();
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -123,5 +173,23 @@ namespace ShirtStormMvc.Controllers
         {
             return RedirectToAction(nameof(Index));
         }
+
+        private async Task<Address?> GetAddress(Guid? id)
+        {
+            var customerId = await GetCustomerId();
+            return await _dbContext.Addresses.Where(a => a.CustomerGuid == customerId && a.Id == id).FirstOrDefaultAsync();
+        }
+
+        private async Task<Guid> GetCustomerId()
+        {
+            var identityEmail = string.Empty;
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                identityEmail = User.FindFirstValue("emails");
+            }
+
+            return await _dbContext.Customers.Where(s => s.IdentityEmail == identityEmail).Select(x => x.Id).FirstAsync()!;
+        }
+
     }
 }
