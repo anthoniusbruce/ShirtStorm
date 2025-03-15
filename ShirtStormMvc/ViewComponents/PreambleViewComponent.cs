@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShirtStormMvc.Models;
 
 namespace ShirtStormMvc.ViewComponents
 {
     public class PreambleViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(string? finalTagLine)
         {
-            return View();
+            return View(new PreambleViewModel { FinalTagLine = finalTagLine });
         }
     }
 }

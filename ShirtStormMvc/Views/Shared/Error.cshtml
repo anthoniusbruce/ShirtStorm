@@ -4,11 +4,4 @@
     Layout = "EmptyLayout";
 }
 
-@await Component.InvokeAsync("Preamble")
-
-@if (Model.ShowRequestId)
-{
-    <p>
-        <code>@Model.RequestId</code>
-    </p>
-}
+@await Component.InvokeAsync("Preamble", Model.RequestId)
