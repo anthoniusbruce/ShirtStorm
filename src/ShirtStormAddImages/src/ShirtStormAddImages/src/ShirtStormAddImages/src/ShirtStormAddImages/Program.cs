@@ -13,7 +13,7 @@ foreach (string arg in args)
         var kvUri = "https://shirt-storm-vault.vault.azure.net/";
         var client = new SecretClient(new Uri(kvUri), new DefaultAzureCredential());
         var secret = client.GetSecret("shirtstormdb");
-        connectionString = $"Server=tcp:shirt-storm-customer.database.windows.net,1433;Initial Catalog=ShirtStorm;Persist Security Info=False;User ID=azureuser;Password={secret.Value.Value};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        connectionString = $"";
     }
     else if (Path.Exists(arg))
     {
