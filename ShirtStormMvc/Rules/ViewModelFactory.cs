@@ -32,5 +32,20 @@ namespace ShirtStormMvc.Rules
 
             return viewModel;
         }
+
+        public static FrontPageDesignViewModel CreateFrontPageDesignVM(Design design, Image image)
+        {
+            var imageSrc = Convert.ToBase64String(image.Bytes!);
+            var imageDataURL = $"data:image/jpeg;base64,{imageSrc}";
+
+            var viewModel = new FrontPageDesignViewModel
+            {
+                Description = design.Description ?? string.Empty,
+                Title = design.Title,
+                ImageSource = imageDataURL
+            }
+            ;
+            return viewModel;
+        }
     }
 }

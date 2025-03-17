@@ -1,4 +1,5 @@
-﻿using ShirtStormCommon.Models;
+﻿using System.Text;
+using ShirtStormCommon.Models;
 using ShirtStormMvc.Rules;
 
 namespace ShirtStormTests
@@ -6,6 +7,39 @@ namespace ShirtStormTests
     [TestClass]
     public sealed class ViewModelFactoryTests
     {
+        [TestMethod]
+        public void CreateFrontPageDesignModel()
+        {
+            var imageId = Guid.NewGuid();
+            var bytes = Encoding.UTF8.GetBytes("Bytes");
+            var expectedImageSource = $"data:image/jpeg;base64,{Convert.ToBase64String(bytes)}";
+            var designId = new Guid();
+            var expDescription = "description";
+            var displayOnFrontPage = true;
+            var expTitle = "title";
+            var releaseDate = DateTime.Now;
+            var image = new Image
+            {
+                Id = imageId,
+                Bytes = bytes
+            };
+            var design = new Design
+            {
+                Id = designId,
+                Description = expDescription,
+                DisplayOnFrontPage = displayOnFrontPage,
+                Title = expTitle,
+                ImageId = imageId,
+                ReleaseDate = releaseDate,
+            };
+
+            var actual = ViewModelFactory.CreateFrontPageDesignVM(design, image);
+
+            Assert.AreEqual(expDescription, actual.Description);
+            Assert.AreEqual(expTitle, actual.Title);
+            Assert.AreEqual(expectedImageSource, actual.ImageSource);
+        }
+
         [TestMethod]
         public void AddressToAddressViewModel()
         {
