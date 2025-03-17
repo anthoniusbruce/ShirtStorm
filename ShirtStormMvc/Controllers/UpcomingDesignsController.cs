@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ShirtStormCommon.Models;
 using ShirtStormMvc.Dtos;
 using ShirtStormMvc.Database;
+using ShirtStormMvc.Models;
 
 namespace ShirtStormMvc.Controllers
 {
@@ -62,11 +63,11 @@ namespace ShirtStormMvc.Controllers
             var customerId = await GetCustomerId();
             var addresses = await _dbContext.Addresses.Where(a => a.CustomerGuid == customerId).ToListAsync()!;
 
-            var addressDtos = new List<AddressDto>();
+            var addressViewModel = new List<AddressViewModel>();
 
             foreach (var address in addresses??new List<Address>())
             {
-                addressDtos.Add(new AddressDto
+                addressViewModel.Add(new AddressViewModel
                 {
                     Id = address.Id,
                     Recipient = address.Recipient ?? string.Empty,
@@ -77,18 +78,18 @@ namespace ShirtStormMvc.Controllers
                 });
             }
 
-            return ViewComponent("Address", addressDtos);
+            return ViewComponent("Address", addressViewModel);
         }
 
         public async Task<IActionResult> AddressUpdateBlock(Guid? id)
         {
-            AddressDto? addressDto = null;
+            AddressViewModel? addressViewModel = null;
             if (id.HasValue)
             {
                 var address = await GetAddress(id);
                 if (address != null)
                 {
-                    addressDto = new AddressDto()
+                    addressViewModel = new AddressViewModel()
                     {
                         Id = address.Id,
                         Alias = address.Alias,
@@ -100,9 +101,9 @@ namespace ShirtStormMvc.Controllers
                 }
             }
 
-            if (addressDto == null)
+            if (addressViewModel == null)
             {
-                addressDto = new AddressDto() 
+                addressViewModel = new AddressViewModel() 
                 { 
                     Alias = string.Empty, 
                     CityStateZip = string.Empty, 
@@ -113,43 +114,43 @@ namespace ShirtStormMvc.Controllers
                 };
             }
 
-            return ViewComponent("AddressUpdateBlock", addressDto);
+            return ViewComponent("AddressUpdateBlock", addressViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddressUpdateBlock(AddressDto dto)
+        public async Task<IActionResult> AddressUpdateBlock(AddressViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index), dto);
+                return RedirectToAction(nameof(Index), viewModel);
             }
 
-            if (string.IsNullOrWhiteSpace(dto.Alias))
-                dto.Alias = dto.Recipient;
+            if (string.IsNullOrWhiteSpace(viewModel.Alias))
+                viewModel.Alias = viewModel.Recipient;
 
-            var address = await GetAddress(dto.Id);
+            var address = await GetAddress(viewModel.Id);
 
             if (address == null)
             {
                 _dbContext.Add(new Address
                 {
-                    Id = dto.Id,
+                    Id = viewModel.Id,
                     CustomerGuid = await GetCustomerId(),
-                    Alias = dto.Alias,
-                    Recipient = dto.Recipient,
-                    StreetAddress1 = dto.StreetAddress1,
-                    StreetAddress2 = dto.StreetAddress2,
-                    CityStateZip = dto.CityStateZip
+                    Alias = viewModel.Alias,
+                    Recipient = viewModel.Recipient,
+                    StreetAddress1 = viewModel.StreetAddress1,
+                    StreetAddress2 = viewModel.StreetAddress2,
+                    CityStateZip = viewModel.CityStateZip
                 });
                 await _dbContext.SaveChangesAsync();
             }
             else
             {
-                address.Alias = dto.Alias;
-                address.Recipient = dto.Recipient;
-                address.StreetAddress1 = dto.StreetAddress1;
-                address.StreetAddress2 = dto.StreetAddress2;
-                address.CityStateZip = dto.CityStateZip;
+                address.Alias = viewModel.Alias;
+                address.Recipient = viewModel.Recipient;
+                address.StreetAddress1 = viewModel.StreetAddress1;
+                address.StreetAddress2 = viewModel.StreetAddress2;
+                address.CityStateZip = viewModel.CityStateZip;
                 _dbContext.Update(address);
                 await _dbContext.SaveChangesAsync();
             }

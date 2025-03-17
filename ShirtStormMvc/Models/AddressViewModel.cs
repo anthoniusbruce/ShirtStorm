@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ShirtStormMvc.Dtos
+namespace ShirtStormMvc.Models
 {
-    public class AddressDto
+    public class AddressViewModel
     {
         [HiddenInput]
         public Guid Id { get; set; }

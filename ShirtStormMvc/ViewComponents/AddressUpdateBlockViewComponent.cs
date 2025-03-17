@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShirtStormMvc.Dtos;
+using ShirtStormMvc.Models;
 
 namespace ShirtStormMvc.ViewComponents
 {
     public class AddressUpdateBlockViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(AddressDto dto)
+        public IViewComponentResult Invoke(AddressViewModel model)
         {
-            return View(dto);
+            return View(model);
         }
     }
 }
