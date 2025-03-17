@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ShirtStormCommon.Models;
 using ShirtStormMvc.Controllers;
 using ShirtStormMvc.Database;
-using ShirtStormMvc.Dtos;
+using ShirtStormMvc.Models;
 
 namespace ShirtStormMvc.ViewComponents
 {
@@ -25,26 +25,26 @@ namespace ShirtStormMvc.ViewComponents
                         where design.DisplayOnFrontPage == true
                         join image in _dbContext.Images
                             on design.ImageId equals image.Id
-                        select CreateDto(design, image);
+                        select CreateViewModel(design, image);
 
             var designs = query.ToListAsync();
 
             return View(await designs);
         }
 
-        private static FrontPageDesignDto CreateDto(Design design, Image image)
+        private static FrontPageDesignViewModel CreateViewModel(Design design, Image image)
         {
             var imageSrc = Convert.ToBase64String(image.Bytes!);
             var imageDataURL = $"data:image/jpeg;base64,{imageSrc}";
 
-            var dto = new FrontPageDesignDto
+            var model = new FrontPageDesignViewModel
             {
                 Title = design.Title!,
                 Description = design.Description!,
                 ImageSource = imageDataURL
             };
 
-            return dto;
+            return model;
         }
 
     }
