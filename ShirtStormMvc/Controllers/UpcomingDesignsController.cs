@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ShirtStormCommon.Models;
 using ShirtStormMvc.Database;
 using ShirtStormMvc.Models;
+using ShirtStormMvc.Rules;
 
 namespace ShirtStormMvc.Controllers
 {
@@ -60,21 +61,13 @@ namespace ShirtStormMvc.Controllers
         public async Task<IActionResult> AddressViewCrud()
         {
             var customerId = await GetCustomerId();
-            var addresses = await _dbContext.Addresses.Where(a => a.CustomerGuid == customerId).ToListAsync()!;
+            var addresses = await _dbContext.Addresses.OrderBy(a => a.Alias).Where(a => a.CustomerGuid == customerId).ToListAsync()!;
 
             var addressViewModel = new List<AddressViewModel>();
 
             foreach (var address in addresses??new List<Address>())
             {
-                addressViewModel.Add(new AddressViewModel
-                {
-                    Id = address.Id,
-                    Recipient = address.Recipient ?? string.Empty,
-                    StreetAddress1 = address.StreetAddress1 ?? string.Empty,
-                    StreetAddress2 = address.StreetAddress2,
-                    CityStateZip = address.CityStateZip ?? string.Empty,
-                    Alias = address.Alias
-                });
+                addressViewModel.Add(ViewModelFactory.CreateAddressVM(address));
             }
 
             return ViewComponent("Address", addressViewModel);
@@ -85,32 +78,16 @@ namespace ShirtStormMvc.Controllers
             AddressViewModel? addressViewModel = null;
             if (id.HasValue)
             {
-                var address = await GetAddress(id);
+                var address = await GetAddress(id, await GetCustomerId());
                 if (address != null)
                 {
-                    addressViewModel = new AddressViewModel()
-                    {
-                        Id = address.Id,
-                        Alias = address.Alias,
-                        Recipient = address.Recipient ?? string.Empty,
-                        StreetAddress1 = address.StreetAddress1 ?? string.Empty,
-                        StreetAddress2 = address.StreetAddress2,
-                        CityStateZip = address.CityStateZip ?? string.Empty
-                    };
+                    addressViewModel = ViewModelFactory.CreateAddressVM(address);
                 }
             }
 
             if (addressViewModel == null)
             {
-                addressViewModel = new AddressViewModel() 
-                { 
-                    Alias = string.Empty, 
-                    CityStateZip = string.Empty, 
-                    Recipient = string.Empty,
-                    StreetAddress1 = string.Empty,
-                    StreetAddress2 = string.Empty, 
-                    Id = Guid.NewGuid() 
-                };
+                addressViewModel = ViewModelFactory.CreateAddressVM();
             }
 
             return ViewComponent("AddressUpdateBlock", addressViewModel);
@@ -124,32 +101,19 @@ namespace ShirtStormMvc.Controllers
                 return RedirectToAction(nameof(Index), viewModel);
             }
 
-            if (string.IsNullOrWhiteSpace(viewModel.Alias))
-                viewModel.Alias = viewModel.Recipient;
-
-            var address = await GetAddress(viewModel.Id);
+            var customerId = await GetCustomerId();
+            var address = await GetAddress(viewModel.Id, customerId);
 
             if (address == null)
             {
-                _dbContext.Add(new Address
-                {
-                    Id = viewModel.Id,
-                    CustomerGuid = await GetCustomerId(),
-                    Alias = viewModel.Alias,
-                    Recipient = viewModel.Recipient,
-                    StreetAddress1 = viewModel.StreetAddress1,
-                    StreetAddress2 = viewModel.StreetAddress2,
-                    CityStateZip = viewModel.CityStateZip
-                });
+                address = ViewModelPostSubmit.TransferBack(new Address { CustomerGuid = customerId}, viewModel);
+                _dbContext.Add(address);
                 await _dbContext.SaveChangesAsync();
             }
             else
             {
-                address.Alias = viewModel.Alias;
-                address.Recipient = viewModel.Recipient;
-                address.StreetAddress1 = viewModel.StreetAddress1;
-                address.StreetAddress2 = viewModel.StreetAddress2;
-                address.CityStateZip = viewModel.CityStateZip;
+                address = ViewModelPostSubmit.TransferBack(address, viewModel);
+
                 _dbContext.Update(address);
                 await _dbContext.SaveChangesAsync();
             }
@@ -159,7 +123,7 @@ namespace ShirtStormMvc.Controllers
 
         public async Task<IActionResult> AddressDelete(Guid id)
         {
-            var address = await GetAddress(id);
+            var address = await GetAddress(id, await GetCustomerId());
             if (address != null)
             {
                 _dbContext.Remove(address);
@@ -174,9 +138,8 @@ namespace ShirtStormMvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<Address?> GetAddress(Guid? id)
+        private async Task<Address?> GetAddress(Guid? id, Guid customerId)
         {
-            var customerId = await GetCustomerId();
             return await _dbContext.Addresses.Where(a => a.CustomerGuid == customerId && a.Id == id).FirstOrDefaultAsync();
         }
 
