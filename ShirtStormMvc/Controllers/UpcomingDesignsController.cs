@@ -3,7 +3,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShirtStormCommon.Models;
-using ShirtStormMvc.Dtos;
 using ShirtStormMvc.Database;
 using ShirtStormMvc.Models;
 
@@ -24,7 +23,7 @@ namespace ShirtStormMvc.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var upcoming = new UpcomingDesignsDto();
+            var upcomingModel = new UpcomingDesignsViewModel();
 
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
@@ -51,11 +50,11 @@ namespace ShirtStormMvc.Controllers
                     _dbContext.Update(customer);
                     _dbContext.SaveChanges();
 
-                    upcoming.IsAMember = customer.IsAMember;
+                    upcomingModel.IsAMember = customer.IsAMember;
                 }
             }
 
-            return View(upcoming);
+            return View(upcomingModel);
         }
 
         public async Task<IActionResult> AddressViewCrud()
