@@ -19,7 +19,7 @@
             <div class="container-fluid">
                 @if (User.Identity?.IsAuthenticated == true)
                 {
-                    <span class="navbar-brand"> @User.Identity?.Name! It&apos;s a <a class="navbar-brand" asp-area=""
+                    <span class="navbar-brand"> @User.Identity?.Name! It&apos;s a <a class="alternate-navbar-brand" asp-area=""
                             asp-controller="Home" asp-action="Index">Shirt Storm!</a></span>
                 }
                 else

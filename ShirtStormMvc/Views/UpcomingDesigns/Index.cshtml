@@ -9,8 +9,54 @@
 {
     <div class="preamble-row">
         <div class="preamble-column">
+            <div class="mini-navbar">
+                @{
+                    string? addressType = ViewData["addressType"] as string;
+                    if (addressType != "Suggestions" && addressType != "Commissions")
+                    {
+                        <div class="mini-navbar-3col">
+                            <h1>Destinations!</h1>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mini-navbar-3col">
+                            <h2><a asp-controller="UpcomingDesigns" asp-action="Index">Destinations</a></h2>
+                        </div>
+                    }
+
+                    if (addressType == "Suggestions")
+                    {
+                        <div class="mini-navbar-3col">
+                            <h1>Suggestions!</h1>
+                        </div>
+
+                    }
+                    else
+                    {
+                        var suggestion = new Dictionary<string, string> { { "addressType", "Suggestions" } };
+                        <div class="mini-navbar-3col">
+                            <h2><a asp-controller="UpcomingDesigns" asp-action="Index" asp-all-route-data="@suggestion">Suggestions</a></h2>
+                        </div>
+                    }
+
+                    if (addressType == "Commissions")
+                    {
+                        <div class="mini-navbar-3col">
+                            <h1>Commissions!</h1>
+                        </div>
+                    }
+                    else
+                    {
+                        var commission = new Dictionary<string, string> { { "addressType", "Commissions" } };
+                        <div class="mini-navbar-3col">
+                            <h2><a asp-controller="UpcomingDesigns" asp-action="Index" asp-all-route-data="@commission">Commissions</a></h2>
+                        </div>
+                    }
+                }
+            </div>
             <div id="address-space">
-                Loading address form...
+                Loading Destinations! Suggestions! Commissions!...
             </div>
         </div>
         <div class="preamble-logo-column">

@@ -22,7 +22,7 @@ namespace ShirtStormMvc.Controllers
             _dbContext = dbContext;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? addressType)
         {
             var upcomingModel = new UpcomingDesignsViewModel();
 
@@ -53,6 +53,11 @@ namespace ShirtStormMvc.Controllers
 
                     upcomingModel.IsAMember = customer.IsAMember;
                 }
+            }
+
+            if (addressType == "Suggestions" || addressType == "Commissions")
+            {
+                ViewData["addressType"] = addressType;
             }
 
             return View(upcomingModel);
