@@ -8,6 +8,45 @@ namespace ShirtStormTests
     public sealed class ViewModelFactoryTests
     {
         [TestMethod]
+        public void CreateSuggestionSummaryModelWithImage()
+        {
+            var expectedId = Guid.NewGuid();
+            var expectedDescription = "expectedDescription";
+            var suggestion = new Suggestion
+            {
+                Id = expectedId,
+                CustomerGuid = new Guid(),
+                Description = expectedDescription,
+                ImageId = new Guid()
+            };
+         
+            var actual = ViewModelFactory.CreateSuggestionSummaryVM(suggestion);
+
+            Assert.AreEqual(expectedId, actual.Id);
+            Assert.AreEqual(expectedDescription, actual.Description);
+            Assert.IsTrue(actual.HasImage);
+        }
+
+        [TestMethod]
+        public void CreateSuggestionSummaryModelWithoutImage()
+        {
+            var expectedId = Guid.NewGuid();
+            var expectedDescription = "expectedDescription";
+            var suggestion = new Suggestion
+            {
+                Id = expectedId,
+                CustomerGuid = new Guid(),
+                Description = expectedDescription
+            };
+
+            var actual = ViewModelFactory.CreateSuggestionSummaryVM(suggestion);
+
+            Assert.AreEqual(expectedId, actual.Id);
+            Assert.AreEqual(expectedDescription, actual.Description);
+            Assert.IsFalse(actual.HasImage);
+        }
+
+        [TestMethod]
         public void CreateFrontPageDesignModel()
         {
             var imageId = Guid.NewGuid();

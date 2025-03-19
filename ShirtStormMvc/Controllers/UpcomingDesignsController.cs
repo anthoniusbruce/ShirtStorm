@@ -15,6 +15,13 @@ namespace ShirtStormMvc.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ShirtStormDbContext _dbContext;
+        private readonly List<Suggestion> _suggestions =
+        [
+            new Suggestion {Id = Guid.NewGuid(), Description = "Get it right!", CustomerGuid = new Guid()},
+            new Suggestion {Id = Guid.NewGuid(), Description = "You need a t-shirt design with feeling. In this case I'm thinking something blue with orange graphic like the picture posted. This one will be one for the ages. Everyone will want one, including your mother.", CustomerGuid=new Guid()},
+            new Suggestion {Id = Guid.NewGuid(), Description = "More cowbell", CustomerGuid = new Guid(), ImageId = new Guid()},
+            new Suggestion {Id = Guid.NewGuid(), Description = "You got it right!", CustomerGuid = new Guid(), ImageId = new Guid()},
+        ];
 
         public UpcomingDesignsController(ILogger<HomeController> logger, ShirtStormDbContext dbContext)
         {
@@ -77,6 +84,19 @@ namespace ShirtStormMvc.Controllers
 
             return ViewComponent("Address", addressViewModel);
         }
+
+        public IActionResult SuggestionViewCrud()
+        {
+            var suggestionSummaryViewModel = new List<SuggestionSummaryViewModel>();
+
+            foreach (var suggestion in _suggestions ?? new List<Suggestion>())
+            {
+                suggestionSummaryViewModel.Add(ViewModelFactory.CreateSuggestionSummaryVM(suggestion));
+            }
+
+            return ViewComponent("Suggestions", suggestionSummaryViewModel);
+        }
+
 
         public async Task<IActionResult> AddressUpdateBlock(Guid? id)
         {
@@ -158,6 +178,5 @@ namespace ShirtStormMvc.Controllers
 
             return await _dbContext.Customers.Where(s => s.IdentityEmail == identityEmail).Select(x => x.Id).FirstAsync()!;
         }
-
     }
 }

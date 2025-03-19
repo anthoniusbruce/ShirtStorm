@@ -47,5 +47,15 @@ namespace ShirtStormMvc.Rules
             ;
             return viewModel;
         }
+
+        public static SuggestionSummaryViewModel CreateSuggestionSummaryVM(Suggestion suggestion)
+        {
+            return new SuggestionSummaryViewModel
+            {
+                Id = suggestion.Id,
+                Description = suggestion.Description ?? string.Empty,
+                HasImage = suggestion.ImageId.HasValue
+            };
+        }
     }
 }

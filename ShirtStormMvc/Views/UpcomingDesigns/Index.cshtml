@@ -3,6 +3,14 @@
 
 @{
     ViewData["Title"] = "Upcoming";
+    string? addressType = ViewData["addressType"] as string;
+    string controllerMethod = "AddressViewCrud";
+    string sorryMessage = "Addresses";
+    if (addressType == "Suggestions")
+    {
+        controllerMethod = "SuggestionViewCrud";
+        sorryMessage = "Suggestions";
+    }
 }
 
 @if (Model.IsAMember)
@@ -11,7 +19,6 @@
         <div class="preamble-column">
             <div class="mini-navbar">
                 @{
-                    string? addressType = ViewData["addressType"] as string;
                     if (addressType != "Suggestions" && addressType != "Commissions")
                     {
                         <div class="mini-navbar-3col">
@@ -73,13 +80,13 @@ else
     var callback = function() {
         // do loading
         $.ajax({
-            url: '@Url.Action("AddressViewCrud", "UpcomingDesigns")',
+            url: '@Url.Action(@controllerMethod, "UpcomingDesigns")',
             type: 'GET',
             success: function (data) {
                 $('#address-space').html(data);
             },
             error: function() {
-                $('#address-space').html("Sorry! Addresses are not available at this time. :(");
+                $('#address-space').html("Sorry! @sorryMessage are not available at this time. :(");
             }
         });
     };
