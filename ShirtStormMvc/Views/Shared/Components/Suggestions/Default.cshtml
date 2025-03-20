@@ -1,17 +1,17 @@
 ﻿@model List<SuggestionSummaryViewModel>
 <p>Feel free to submit as many suggestions as you want. Suggestions for the website and for future t-shirt designs (including pictures!) are welcome! Be sure to explain all relevant details. If we want to move ahead with your design, we will contact you first so we can work out the details.</p>
-<div class="col-sm-12 address-table" id="address-control-replacement">
-	<table class="table">
+<div class="col-sm-12 address-table-div" id="address-control-replacement">
+	<table class="table address-table">
 		<tr>
-			<th>Suggestion</th>
-			<th>Uploaded Image</th>
-			<th><a href="#">Add</a></th>
+			<th class="address-table-column-70">Suggestion</th>
+			<th class="address-table-column-15">With Image</th>
+			<th class="address-table-column-15"><a href="#">Add</a></th>
 		</tr>
 		@foreach (var item in Model)
 		{
 			<tr>
 				<td>@Html.DisplayFor(modelItem => item.Description)</td>
-				<td>@Html.DisplayFor(modelItem => item.HasImage)</td>
+				<td class="address-table-column-centered">@Html.DisplayFor(modelItem => item.HasImage)</td>
 				<td><a href="#" >Edit</a> | <a href="#">Delete</a></td>
 			</tr>
 		}

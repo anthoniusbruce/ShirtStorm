@@ -80,13 +80,35 @@ body {
         object-fit: contain;
     }
 
-.address-table {
+.address-table-div {
     overflow-y: auto;
     height: 250px;
 }
-.address-table thead th {
+.address-table-dv thead th {
     position: sticky;
     top: 0px;
+}
+.address-table-div td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 25px;
+}
+.address-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.address-table-column-70 {
+    width: 70%;
+}
+
+.address-table-column-15 {
+    width: 15%;
+}
+
+.address-table-column-centered {
+    text-align: center;
 }
 
 .address-create-edit-row {
