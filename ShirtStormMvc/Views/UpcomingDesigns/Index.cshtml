@@ -3,13 +3,16 @@
 
 @{
     ViewData["Title"] = "Upcoming";
+    const string destinations = "Destinations";
+    const string suggestions = "Suggestions";
+    const string commissions = "Commissions";
     string? addressType = ViewData["addressType"] as string;
     string controllerMethod = "AddressViewCrud";
     string sorryMessage = "Addresses";
-    if (addressType == "Suggestions")
+    if (addressType == suggestions)
     {
         controllerMethod = "SuggestionViewCrud";
-        sorryMessage = "Suggestions";
+        sorryMessage = suggestions;
     }
 }
 
@@ -19,47 +22,29 @@
         <div class="preamble-column">
             <div class="mini-navbar">
                 @{
-                    if (addressType != "Suggestions" && addressType != "Commissions")
+                    var order = new List<string> { destinations, suggestions, commissions };
+                    if (addressType == suggestions)
                     {
-                        <div class="mini-navbar-3col">
-                            <h1>Destinations!</h1>
-                        </div>
+                        order[0] = suggestions;
+                        order[1] = destinations;
                     }
-                    else
+                    else if (addressType == commissions)
                     {
-                        <div class="mini-navbar-3col">
-                            <h2><a asp-controller="UpcomingDesigns" asp-action="Index">Destinations</a></h2>
-                        </div>
+                        order[0] = commissions;
+                        order[1] = destinations;
+                        order[2] = commissions;
                     }
-
-                    if (addressType == "Suggestions")
-                    {
-                        <div class="mini-navbar-3col">
-                            <h1>Suggestions!</h1>
-                        </div>
-
-                    }
-                    else
-                    {
-                        var suggestion = new Dictionary<string, string> { { "addressType", "Suggestions" } };
-                        <div class="mini-navbar-3col">
-                            <h2><a asp-controller="UpcomingDesigns" asp-action="Index" asp-all-route-data="@suggestion">Suggestions</a></h2>
-                        </div>
-                    }
-
-                    if (addressType == "Commissions")
-                    {
-                        <div class="mini-navbar-3col">
-                            <h1>Commissions!</h1>
-                        </div>
-                    }
-                    else
-                    {
-                        var commission = new Dictionary<string, string> { { "addressType", "Commissions" } };
-                        <div class="mini-navbar-3col">
-                            <h2><a asp-controller="UpcomingDesigns" asp-action="Index" asp-all-route-data="@commission">Commissions</a></h2>
-                        </div>
-                    }
+                    <div class="mini-navbar-3col">
+                        <h1>@order[0]!</h1>
+                    </div>
+                    var parm1 = new Dictionary<string, string> { { "addressType", order[1] } };
+                    <div class="mini-navbar-3col">
+                        <h2><a asp-controller="UpcomingDesigns" asp-action="Index" asp-all-route-data="@parm1">@order[1]</a></h2>
+                    </div>
+                    var parm2 = new Dictionary<string, string> { { "addressType", order[2] } };
+                    <div class="mini-navbar-3col">
+                        <h2><a asp-controller="UpcomingDesigns" asp-action="Index" asp-all-route-data="@parm2">@order[2]</a></h2>
+                    </div>
                 }
             </div>
             <div id="address-space">
