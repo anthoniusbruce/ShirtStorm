@@ -8,5 +8,7 @@ namespace ShirtStormCommon.Models
         public Guid Id { get; set; }
         public Guid CustomerGuid { get; set; }
         public string? Description { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? CreatedDate { get; set; }
     }
 }
