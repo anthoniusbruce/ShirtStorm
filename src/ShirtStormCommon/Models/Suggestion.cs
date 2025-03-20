@@ -8,6 +8,5 @@ namespace ShirtStormCommon.Models
         public Guid Id { get; set; }
         public Guid CustomerGuid { get; set; }
         public string? Description { get; set; }
-        public Guid? ImageId { get; set; }
     }
 }
