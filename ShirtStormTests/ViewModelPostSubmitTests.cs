@@ -217,10 +217,13 @@ public class ViewModelPostSubmitTests
         Assert.AreEqual(expectedCitystatezip, actual.CityStateZip);
         Assert.AreEqual(expectedCustomerId, actual.CustomerGuid);
     }
+
     [TestMethod]
     public void TransferBackToSuggestion()
     {
         var id = Guid.NewGuid();
+        var created = DateTime.MaxValue;
+        var expectedCreated = DateTime.MinValue;
         var expectedCustomerId = Guid.NewGuid();
         var description = "description";
         var expectedId = Guid.NewGuid();
@@ -230,11 +233,13 @@ public class ViewModelPostSubmitTests
             Id = id,
             CustomerGuid = expectedCustomerId,
             Description = description,
+            CreatedDate = created
         };
         var viewModel = new SuggestionViewModel
         {
             Id = expectedId,
-            Description = expectedDescription
+            Description = expectedDescription,
+            CreatedDate = expectedCreated
         };
 
         var actual = ViewModelPostSubmit.TransferBack(model, viewModel);
@@ -242,6 +247,7 @@ public class ViewModelPostSubmitTests
         Assert.AreEqual(expectedId, actual.Id);
         Assert.AreEqual(expectedCustomerId, actual.CustomerGuid);
         Assert.AreEqual(expectedDescription, actual.Description);
+        Assert.AreEqual(expectedCreated, actual.CreatedDate);
     }
 
     [TestMethod]
@@ -251,22 +257,26 @@ public class ViewModelPostSubmitTests
         var description = "description";
         var expectedId = Guid.NewGuid();
         var expectedDescription = "expectedDescription";
+        var expectedCreated = DateTime.MinValue;
         var model = new Suggestion
         {
             Id = expectedId,
             CustomerGuid = expectedCustomerId,
-            Description = description
+            Description = description,
+            CreatedDate = expectedCreated
         };
         var viewModel = new SuggestionViewModel
         {
             Id = expectedId,
-            Description = expectedDescription
+            Description = expectedDescription,
+            CreatedDate = expectedCreated
         };
 
         var actual = ViewModelPostSubmit.TransferBack(model, viewModel);
 
         Assert.AreEqual(expectedId, actual.Id);
         Assert.AreEqual(expectedCustomerId, actual.CustomerGuid);
+        Assert.AreEqual(expectedCreated, actual.CreatedDate);
         Assert.AreEqual(expectedDescription, actual.Description);
     }
 
@@ -276,16 +286,19 @@ public class ViewModelPostSubmitTests
         var expectedCustomerId = Guid.NewGuid();
         var expectedId = Guid.NewGuid();
         var expectedDescription = "expectedDescription";
+        var expectedCreatedDate = DateTime.MinValue;
         var model = new Suggestion
         {
             Id = expectedId,
             CustomerGuid = expectedCustomerId,
             Description = expectedDescription,
+            CreatedDate = expectedCreatedDate
         };
         var viewModel = new SuggestionViewModel
         {
             Id = expectedId,
-            Description = expectedDescription
+            Description = expectedDescription,
+            CreatedDate= expectedCreatedDate
         };
 
         var actual = ViewModelPostSubmit.TransferBack(model, viewModel);
@@ -293,11 +306,13 @@ public class ViewModelPostSubmitTests
         Assert.AreEqual(expectedId, actual.Id);
         Assert.AreEqual(expectedCustomerId, actual.CustomerGuid);
         Assert.AreEqual(expectedDescription, actual.Description);
+        Assert.AreEqual(expectedCreatedDate, actual.CreatedDate);
     }
 
     [TestMethod]
     public void TransferBackToSuggestionEmptySuggestion()
     {
+        var expectedCreatedDate = DateTime.MinValue;
         var expectedCustomerId = Guid.NewGuid();
         var expectedId = Guid.NewGuid();
         var expectedDescription = "expectedDescription";
@@ -308,7 +323,8 @@ public class ViewModelPostSubmitTests
         var viewModel = new SuggestionViewModel
         {
             Id = expectedId,
-            Description= expectedDescription
+            Description= expectedDescription,
+            CreatedDate = expectedCreatedDate
         };
 
         var actual = ViewModelPostSubmit.TransferBack(model, viewModel);
@@ -316,5 +332,6 @@ public class ViewModelPostSubmitTests
         Assert.AreEqual(expectedId, actual.Id);
         Assert.AreEqual(expectedCustomerId, actual.CustomerGuid);
         Assert.AreEqual(expectedDescription, actual.Description);
+        Assert.AreEqual(expectedCreatedDate, actual.CreatedDate);
     }
 }

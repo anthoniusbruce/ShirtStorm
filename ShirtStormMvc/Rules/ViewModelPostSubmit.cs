@@ -28,6 +28,7 @@ namespace ShirtStormMvc.Rules
         {
             model.Id = viewModel.Id;
             model.Description = viewModel.Description;
+            model.CreatedDate = viewModel.CreatedDate;
 
             return model;
         }

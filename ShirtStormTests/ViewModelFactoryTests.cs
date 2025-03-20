@@ -12,17 +12,20 @@ namespace ShirtStormTests
         {
             var expectedId = Guid.NewGuid();
             var expectedDescription = "expectedDescription";
+            var expectedCreatedDate = DateTime.MinValue;
             var suggestion = new Suggestion
             {
                 Id = expectedId,
                 CustomerGuid = new Guid(),
                 Description = expectedDescription,
+                CreatedDate = expectedCreatedDate
             };
          
             var actual = ViewModelFactory.CreateSuggestionVM(suggestion);
 
             Assert.AreEqual(expectedId, actual.Id);
             Assert.AreEqual(expectedDescription, actual.Description);
+            Assert.AreEqual(expectedCreatedDate, actual.CreatedDate);
         }
 
         [TestMethod]
@@ -32,6 +35,7 @@ namespace ShirtStormTests
 
             Assert.IsFalse(viewModel.Id == Guid.Empty);
             Assert.IsTrue(string.IsNullOrEmpty(viewModel.Description));
+            Assert.AreEqual(DateTime.Today, viewModel.CreatedDate);
         }
 
         [TestMethod]

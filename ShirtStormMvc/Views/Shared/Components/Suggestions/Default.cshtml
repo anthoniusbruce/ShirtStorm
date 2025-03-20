@@ -3,12 +3,14 @@
 <div class="col-sm-12 address-table-div" id="address-control-replacement">
 	<table class="table address-table">
 		<tr>
-			<th class="address-table-column-85">Suggestion</th>
+			<th class="address-table-column-15">Date</th>
+			<th class="address-table-column-70">Suggestion</th>
 			<th class="address-table-column-15"><a href="#" onclick="suggestionUpdateBlock();">Add</a></th>
 		</tr>
 		@foreach (var item in Model)
 		{
 			<tr>
+				<td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
 				<td>@Html.DisplayFor(modelItem => item.Description)</td>
 				<td><a href="#" onclick="suggestionUpdateBlock('@item.Id');">Edit</a> | <a asp-controller="UpcomingDesigns" asp-action="SuggestionDelete" asp-route-id="@item.Id">Delete</a></td>
 			</tr>

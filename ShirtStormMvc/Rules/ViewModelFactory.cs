@@ -54,12 +54,13 @@ namespace ShirtStormMvc.Rules
             {
                 Id = suggestion.Id,
                 Description = suggestion.Description ?? string.Empty,
+                CreatedDate = suggestion.CreatedDate ?? DateTime.Today
             };
         }
 
         public static SuggestionViewModel CreateSuggestionVM()
         {
-            return new SuggestionViewModel { Id = Guid.NewGuid(), Description = string.Empty };
+            return new SuggestionViewModel { Id = Guid.NewGuid(), Description = string.Empty, CreatedDate = DateTime.Today };
         }
     }
 }
