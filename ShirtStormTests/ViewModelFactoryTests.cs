@@ -8,7 +8,7 @@ namespace ShirtStormTests
     public sealed class ViewModelFactoryTests
     {
         [TestMethod]
-        public void CreateSuggestionSummaryModelWithImage()
+        public void CreateSuggestionViewModel()
         {
             var expectedId = Guid.NewGuid();
             var expectedDescription = "expectedDescription";
@@ -17,33 +17,21 @@ namespace ShirtStormTests
                 Id = expectedId,
                 CustomerGuid = new Guid(),
                 Description = expectedDescription,
-                ImageId = new Guid()
             };
          
-            var actual = ViewModelFactory.CreateSuggestionSummaryVM(suggestion);
+            var actual = ViewModelFactory.CreateSuggestionVM(suggestion);
 
             Assert.AreEqual(expectedId, actual.Id);
             Assert.AreEqual(expectedDescription, actual.Description);
-            Assert.IsTrue(actual.HasImage);
         }
 
         [TestMethod]
-        public void CreateSuggestionSummaryModelWithoutImage()
+        public void NoSuggestionToSuggestionViewModel()
         {
-            var expectedId = Guid.NewGuid();
-            var expectedDescription = "expectedDescription";
-            var suggestion = new Suggestion
-            {
-                Id = expectedId,
-                CustomerGuid = new Guid(),
-                Description = expectedDescription
-            };
+            var viewModel = ViewModelFactory.CreateSuggestionVM();
 
-            var actual = ViewModelFactory.CreateSuggestionSummaryVM(suggestion);
-
-            Assert.AreEqual(expectedId, actual.Id);
-            Assert.AreEqual(expectedDescription, actual.Description);
-            Assert.IsFalse(actual.HasImage);
+            Assert.IsFalse(viewModel.Id == Guid.Empty);
+            Assert.IsTrue(string.IsNullOrEmpty(viewModel.Description));
         }
 
         [TestMethod]

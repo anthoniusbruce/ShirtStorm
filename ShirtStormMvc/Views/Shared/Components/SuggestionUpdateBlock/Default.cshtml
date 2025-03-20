@@ -1,0 +1,25 @@
+﻿@using System.ComponentModel.DataAnnotations
+@model SuggestionViewModel
+
+@{
+	var parms = new Dictionary<string, string>
+			{
+				{ "addressType", "Suggestions" }
+			};
+}
+
+<div class="data-entry col-sm-11">
+	<form asp-controller="UpcomingDesigns" asp-action="SuggestionUpdateBlock" method="post" enctype="multipart/form-data">
+		@Html.AntiForgeryToken()
+		<input asp-for="@Model.Id" />
+		<div class="address-create-edit-row">
+			<div class="address-create-edit-field">
+				@Html.TextArea("Description", new { @placeholder = "Type suggestion here...", @class = "form-control", @required = "required" })
+			</div>
+		</div>
+		<div class="far-right">
+			<a class="btn btn-default" asp-controller="UpcomingDesigns" asp-action="Index" asp-all-route-data="@parms">Cancel</a>
+			<button class="btn btn-success relative" id="btnSubmit" type="submit">Submit</button>
+		</div>
+	</form>
+</div>

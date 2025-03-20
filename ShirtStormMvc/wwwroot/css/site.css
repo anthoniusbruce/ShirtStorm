@@ -99,8 +99,8 @@ body {
     width: 100%;
 }
 
-.address-table-column-70 {
-    width: 70%;
+.address-table-column-85 {
+    width: 85%;
 }
 
 .address-table-column-15 {
@@ -122,6 +122,10 @@ body {
 
 .address-create-edit-error {
     flex: 12%;
+}
+
+.suggestions-text-area {
+    flex: 100%;
 }
 
 .data-entry {

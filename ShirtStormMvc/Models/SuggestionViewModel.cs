@@ -8,7 +8,5 @@ namespace ShirtStormMvc.Models
         public Guid Id { get; set; }
         
         public required string Description { get; set; }
-
-        public string? ImageSource { get; set; }        
     }
 }

@@ -48,14 +48,18 @@ namespace ShirtStormMvc.Rules
             return viewModel;
         }
 
-        public static SuggestionSummaryViewModel CreateSuggestionSummaryVM(Suggestion suggestion)
+        public static SuggestionViewModel CreateSuggestionVM(Suggestion suggestion)
         {
-            return new SuggestionSummaryViewModel
+            return new SuggestionViewModel
             {
                 Id = suggestion.Id,
                 Description = suggestion.Description ?? string.Empty,
-                HasImage = suggestion.ImageId.HasValue
             };
+        }
+
+        public static SuggestionViewModel CreateSuggestionVM()
+        {
+            return new SuggestionViewModel { Id = Guid.NewGuid(), Description = string.Empty };
         }
     }
 }

@@ -24,5 +24,12 @@ namespace ShirtStormMvc.Rules
 
                 return model;
         }
+        public static Suggestion TransferBack(Suggestion model, SuggestionViewModel viewModel)
+        {
+            model.Id = viewModel.Id;
+            model.Description = viewModel.Description;
+
+            return model;
+        }
     }
 }

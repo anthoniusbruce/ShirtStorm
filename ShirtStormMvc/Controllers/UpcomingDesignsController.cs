@@ -15,12 +15,12 @@ namespace ShirtStormMvc.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ShirtStormDbContext _dbContext;
-        private readonly List<Suggestion> _suggestions =
+        private static readonly List<Suggestion> _suggestions =
         [
             new Suggestion {Id = Guid.NewGuid(), Description = "Get it right!", CustomerGuid = new Guid()},
             new Suggestion {Id = Guid.NewGuid(), Description = "You need a t-shirt design with feeling. In this case I'm thinking something blue with orange graphic like the picture posted. This one will be one for the ages. Everyone will want one, including your mother.", CustomerGuid=new Guid()},
-            new Suggestion {Id = Guid.NewGuid(), Description = "More cowbell", CustomerGuid = new Guid(), ImageId = new Guid()},
-            new Suggestion {Id = Guid.NewGuid(), Description = "You got it right!", CustomerGuid = new Guid(), ImageId = new Guid()},
+            new Suggestion {Id = Guid.NewGuid(), Description = "More cowbell", CustomerGuid = new Guid()},
+            new Suggestion {Id = Guid.NewGuid(), Description = "You got it right!", CustomerGuid = new Guid()},
         ];
 
         public UpcomingDesignsController(ILogger<HomeController> logger, ShirtStormDbContext dbContext)
@@ -87,16 +87,15 @@ namespace ShirtStormMvc.Controllers
 
         public IActionResult SuggestionViewCrud()
         {
-            var suggestionSummaryViewModel = new List<SuggestionSummaryViewModel>();
+            var suggestionSummaryViewModel = new List<SuggestionViewModel>();
 
             foreach (var suggestion in _suggestions ?? new List<Suggestion>())
             {
-                suggestionSummaryViewModel.Add(ViewModelFactory.CreateSuggestionSummaryVM(suggestion));
+                suggestionSummaryViewModel.Add(ViewModelFactory.CreateSuggestionVM(suggestion));
             }
 
             return ViewComponent("Suggestions", suggestionSummaryViewModel);
         }
-
 
         public async Task<IActionResult> AddressUpdateBlock(Guid? id)
         {
@@ -118,14 +117,29 @@ namespace ShirtStormMvc.Controllers
             return ViewComponent("AddressUpdateBlock", addressViewModel);
         }
 
+        public async Task<IActionResult> SuggestionUpdateBlock(Guid? id)
+        {
+            SuggestionViewModel? suggestionViewModel = null;
+            if (id.HasValue)
+            {
+                var suggestion = await GetSuggestion(id, await GetCustomerId());
+                if (suggestion != null)
+                {
+                    suggestionViewModel = ViewModelFactory.CreateSuggestionVM(suggestion);
+                }
+            }
+
+            if (suggestionViewModel == null)
+            {
+                suggestionViewModel = ViewModelFactory.CreateSuggestionVM();
+            }
+
+            return ViewComponent("SuggestionUpdateBlock", suggestionViewModel);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddressUpdateBlock(AddressViewModel viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction(nameof(Index), viewModel);
-            }
-
             var customerId = await GetCustomerId();
             var address = await GetAddress(viewModel.Id, customerId);
 
@@ -146,6 +160,36 @@ namespace ShirtStormMvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SuggestionUpdateBlock(SuggestionViewModel viewModel)
+        {
+            var customerId = await GetCustomerId();
+            var suggestion = await GetSuggestion(viewModel.Id, customerId);
+
+            if (suggestion == null)
+            {
+                suggestion = ViewModelPostSubmit.TransferBack(new Suggestion { CustomerGuid = customerId }, viewModel);
+                _suggestions.Add(suggestion);
+                //_dbContext.Add(suggestion);
+                //await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                suggestion = ViewModelPostSubmit.TransferBack(suggestion, viewModel);
+
+                for (int i = 0; i < _suggestions.Count(); i++)
+                {
+                    if (_suggestions[i].Id == suggestion.Id)
+                        _suggestions[i] = suggestion;
+                }
+
+                //_dbContext.Update(suggestion);
+                //await _dbContext.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index), new { addressType = "Suggestions" });
+        }
+
         public async Task<IActionResult> AddressDelete(Guid id)
         {
             var address = await GetAddress(id, await GetCustomerId());
@@ -158,6 +202,24 @@ namespace ShirtStormMvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> SuggestionDelete(Guid id)
+        {
+            //var suggestion = await GetSuggestion(id, await GetCustomerId());
+            //if (suggestion != null)
+            //{
+            //    _dbContext.Remove(suggestion);
+            //    await _dbContext.SaveChangesAsync();
+            //}
+
+            var i = _suggestions.FindIndex(x => x.Id == id);
+            if (i >= 0) 
+            {
+                _suggestions.RemoveAt(i);
+            }
+
+            return RedirectToAction(nameof(Index), new {addressType = "Suggestions"});
+        }
+
         public IActionResult Cancel()
         {
             return RedirectToAction(nameof(Index));
@@ -166,6 +228,13 @@ namespace ShirtStormMvc.Controllers
         private async Task<Address?> GetAddress(Guid? id, Guid customerId)
         {
             return await _dbContext.Addresses.Where(a => a.CustomerGuid == customerId && a.Id == id).FirstOrDefaultAsync();
+        }
+
+        private async Task<Suggestion?> GetSuggestion(Guid? id, Guid customerId)
+        {
+            //            return await _dbContext.Suggestions.Where(a => a.CustomerGuid == customerId && a.Id == id).FirstOrDefaultAsync();
+            var task = Task.Run(() => _suggestions.Find(x => x.Id == id));
+            return await task;
         }
 
         private async Task<Guid> GetCustomerId()
