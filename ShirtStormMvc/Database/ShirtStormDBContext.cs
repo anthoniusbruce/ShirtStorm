@@ -13,5 +13,6 @@ namespace ShirtStormMvc.Database
         public DbSet<Image> Images { get; set; } = default!;
         public DbSet<Customer> Customers { get; set; } = default!;
         public DbSet<Address> Addresses { get; set; } = default!;
+        public DbSet<Suggestion> Suggestions { get; set; } = default!;
     }
 }
