@@ -28,12 +28,12 @@
                         order[0] = suggestions;
                         order[1] = destinations;
                     }
-                    else if (addressType == commissions)
-                    {
-                        order[0] = commissions;
-                        order[1] = destinations;
-                        order[2] = commissions;
-                    }
+                    // else if (addressType == commissions)
+                    // {
+                    //     order[0] = commissions;
+                    //     order[1] = destinations;
+                    //     order[2] = suggestions;
+                    // }
                     <div class="mini-navbar-3col">
                         <h1>@order[0]!</h1>
                     </div>
@@ -41,10 +41,10 @@
                     <div class="mini-navbar-3col">
                         <h2><a asp-controller="UpcomingDesigns" asp-action="Index" asp-all-route-data="@parm1">@order[1]</a></h2>
                     </div>
-                    var parm2 = new Dictionary<string, string> { { "addressType", order[2] } };
-                    <div class="mini-navbar-3col">
-                        <h2><a asp-controller="UpcomingDesigns" asp-action="Index" asp-all-route-data="@parm2">@order[2]</a></h2>
-                    </div>
+                    // var parm2 = new Dictionary<string, string> { { "addressType", order[2] } };
+                    // <div class="mini-navbar-3col">
+                    //     <h2><a asp-controller="UpcomingDesigns" asp-action="Index" asp-all-route-data="@parm2">@order[2]</a></h2>
+                    // </div>
                 }
             </div>
             <div id="address-space">
