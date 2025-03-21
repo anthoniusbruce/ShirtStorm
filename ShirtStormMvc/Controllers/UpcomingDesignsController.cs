@@ -81,7 +81,7 @@ namespace ShirtStormMvc.Controllers
         public async Task<IActionResult> SuggestionViewCrud()
         {
             var customerId = await GetCustomerId();
-            var suggestions = await _dbContext.Suggestions.OrderBy(a => a.Id).Where(a => a.CustomerGuid == customerId).ToListAsync()!;
+            var suggestions = await _dbContext.Suggestions.OrderBy(a => a.CreatedDate).Where(a => a.CustomerGuid == customerId).ToListAsync()!;
             
             var suggestionSummaryViewModel = new List<SuggestionViewModel>();
 
@@ -91,6 +91,21 @@ namespace ShirtStormMvc.Controllers
             }
 
             return ViewComponent("Suggestions", suggestionSummaryViewModel);
+        }
+
+        public async Task<IActionResult> CommissionViewCrud()
+        {
+            var customerId = await GetCustomerId();
+            var commissions = await _dbContext.Commissions.OrderBy(a => a.CreatedDate).Where(a => a.CustomerId == customerId).ToListAsync()!;
+
+            var commissionSummaryViewModel = new List<CommissionViewModel>();
+
+            foreach (var commission in commissions ?? new List<Commission>())
+            {
+                commissionSummaryViewModel.Add(ViewModelFactory.CreateCommissionVM(commission));
+            }
+
+            return ViewComponent("Commissions", commissionSummaryViewModel);
         }
 
         public async Task<IActionResult> AddressUpdateBlock(Guid? id)
@@ -131,6 +146,26 @@ namespace ShirtStormMvc.Controllers
             }
 
             return ViewComponent("SuggestionUpdateBlock", suggestionViewModel);
+        }
+
+        public async Task<IActionResult> CommissionUpdateBlock(Guid? id)
+        {
+            CommissionViewModel? commissionViewModel = null;
+            if (id.HasValue)
+            {
+                var commission = await GetCommission(id, await GetCustomerId());
+                if (commission != null)
+                {
+                    commissionViewModel = ViewModelFactory.CreateCommissionVM(commission);
+                }
+            }
+
+            if (commissionViewModel == null)
+            {
+                commissionViewModel = ViewModelFactory.CreateCommissionVM();
+            }
+
+            return ViewComponent("CommissionUpdateBlock", commissionViewModel);
         }
 
         [HttpPost]
@@ -179,6 +214,29 @@ namespace ShirtStormMvc.Controllers
             return RedirectToAction(nameof(Index), new { addressType = "Suggestions" });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CommissionUpdateBlock(CommissionViewModel viewModel)
+        {
+            var customerId = await GetCustomerId();
+            var commission = await GetCommission(viewModel.Id, customerId);
+
+            if (commission == null)
+            {
+                commission = ViewModelPostSubmit.TransferBack(new Commission { CustomerId = customerId }, viewModel);
+                _dbContext.Add(commission);
+                await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                commission = ViewModelPostSubmit.TransferBack(commission, viewModel);
+
+                _dbContext.Update(commission);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index), new { addressType = "Commissions" });
+        }
+
         public async Task<IActionResult> AddressDelete(Guid id)
         {
             var address = await GetAddress(id, await GetCustomerId());
@@ -203,9 +261,21 @@ namespace ShirtStormMvc.Controllers
             return RedirectToAction(nameof(Index), new {addressType = "Suggestions"});
         }
 
-        public IActionResult Cancel()
+        public async Task<IActionResult> CommissionDelete(Guid id)
         {
-            return RedirectToAction(nameof(Index));
+            var commission = await GetCommission(id, await GetCustomerId());
+            if (commission != null)
+            {
+                _dbContext.Remove(commission);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index), new { addressType = "Commissions" });
+        }
+
+        public IActionResult Cancel(string? addressType)
+        {
+            return RedirectToAction(nameof(Index), new { addressType });
         }
 
         private async Task<Address?> GetAddress(Guid? id, Guid customerId)
@@ -216,6 +286,11 @@ namespace ShirtStormMvc.Controllers
         private async Task<Suggestion?> GetSuggestion(Guid? id, Guid customerId)
         {
             return await _dbContext.Suggestions.Where(a => a.CustomerGuid == customerId && a.Id == id).FirstOrDefaultAsync();
+        }
+
+        private async Task<Commission?> GetCommission(Guid? id, Guid customerId)
+        {
+            return await _dbContext.Commissions.Where(a => a.CustomerId == customerId && a.Id == id).FirstOrDefaultAsync();
         }
 
         private async Task<Guid> GetCustomerId()

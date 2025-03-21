@@ -32,5 +32,14 @@ namespace ShirtStormMvc.Rules
 
             return model;
         }
+
+        public static Commission TransferBack(Commission model, CommissionViewModel viewModel)
+        {
+            model.Id = viewModel.Id;
+            model.Description = viewModel.Description;
+            model.CreatedDate = viewModel.CreatedDate;
+
+            return model;
+        }
     }
 }

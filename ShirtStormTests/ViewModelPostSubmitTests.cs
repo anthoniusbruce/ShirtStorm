@@ -334,4 +334,121 @@ public class ViewModelPostSubmitTests
         Assert.AreEqual(expectedDescription, actual.Description);
         Assert.AreEqual(expectedCreatedDate, actual.CreatedDate);
     }
+
+    [TestMethod]
+    public void TransferBackToCommission()
+    {
+        var id = Guid.NewGuid();
+        var created = DateTime.MaxValue;
+        var expectedCreated = DateTime.MinValue;
+        var expectedCustomerId = Guid.NewGuid();
+        var description = "description";
+        var expectedId = Guid.NewGuid();
+        var expectedDescription = "expectedDescription";
+        var model = new Commission
+        {
+            Id = id,
+            CustomerId = expectedCustomerId,
+            Description = description,
+            CreatedDate = created
+        };
+        var viewModel = new CommissionViewModel
+        {
+            Id = expectedId,
+            Description = expectedDescription,
+            CreatedDate = expectedCreated
+        };
+
+        var actual = ViewModelPostSubmit.TransferBack(model, viewModel);
+
+        Assert.AreEqual(expectedId, actual.Id);
+        Assert.AreEqual(expectedCustomerId, actual.CustomerId);
+        Assert.AreEqual(expectedDescription, actual.Description);
+        Assert.AreEqual(expectedCreated, actual.CreatedDate);
+    }
+
+    [TestMethod]
+    public void TransferBackToCommissionOnlyOneChange()
+    {
+        var expectedCustomerId = Guid.NewGuid();
+        var description = "description";
+        var expectedId = Guid.NewGuid();
+        var expectedDescription = "expectedDescription";
+        var expectedCreated = DateTime.MinValue;
+        var model = new Commission
+        {
+            Id = expectedId,
+            CustomerId = expectedCustomerId,
+            Description = description,
+            CreatedDate = expectedCreated
+        };
+        var viewModel = new CommissionViewModel
+        {
+            Id = expectedId,
+            Description = expectedDescription,
+            CreatedDate = expectedCreated
+        };
+
+        var actual = ViewModelPostSubmit.TransferBack(model, viewModel);
+
+        Assert.AreEqual(expectedId, actual.Id);
+        Assert.AreEqual(expectedCustomerId, actual.CustomerId);
+        Assert.AreEqual(expectedCreated, actual.CreatedDate);
+        Assert.AreEqual(expectedDescription, actual.Description);
+    }
+
+    [TestMethod]
+    public void TransferBackToCommissionNoChange()
+    {
+        var expectedCustomerId = Guid.NewGuid();
+        var expectedId = Guid.NewGuid();
+        var expectedDescription = "expectedDescription";
+        var expectedCreatedDate = DateTime.MinValue;
+        var model = new Commission
+        {
+            Id = expectedId,
+            CustomerId = expectedCustomerId,
+            Description = expectedDescription,
+            CreatedDate = expectedCreatedDate
+        };
+        var viewModel = new CommissionViewModel
+        {
+            Id = expectedId,
+            Description = expectedDescription,
+            CreatedDate = expectedCreatedDate
+        };
+
+        var actual = ViewModelPostSubmit.TransferBack(model, viewModel);
+
+        Assert.AreEqual(expectedId, actual.Id);
+        Assert.AreEqual(expectedCustomerId, actual.CustomerId);
+        Assert.AreEqual(expectedDescription, actual.Description);
+        Assert.AreEqual(expectedCreatedDate, actual.CreatedDate);
+    }
+
+    [TestMethod]
+    public void TransferBackToCommissionEmptySuggestion()
+    {
+        var expectedCreatedDate = DateTime.MinValue;
+        var expectedCustomerId = Guid.NewGuid();
+        var expectedId = Guid.NewGuid();
+        var expectedDescription = "expectedDescription";
+        var model = new Commission
+        {
+            CustomerId = expectedCustomerId,
+        };
+        var viewModel = new CommissionViewModel
+        {
+            Id = expectedId,
+            Description = expectedDescription,
+            CreatedDate = expectedCreatedDate
+        };
+
+        var actual = ViewModelPostSubmit.TransferBack(model, viewModel);
+
+        Assert.AreEqual(expectedId, actual.Id);
+        Assert.AreEqual(expectedCustomerId, actual.CustomerId);
+        Assert.AreEqual(expectedDescription, actual.Description);
+        Assert.AreEqual(expectedCreatedDate, actual.CreatedDate);
+    }
 }

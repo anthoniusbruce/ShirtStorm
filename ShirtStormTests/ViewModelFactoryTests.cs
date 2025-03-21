@@ -8,6 +8,37 @@ namespace ShirtStormTests
     public sealed class ViewModelFactoryTests
     {
         [TestMethod]
+        public void CreateCommissionViewModel()
+        {
+            var expectedId = Guid.NewGuid();
+            var expectedDescription = "expectedDescription";
+            var expectedCreatedDate = DateTime.MinValue;
+            var commission = new Commission
+            {
+                Id = expectedId,
+                CustomerId = new Guid(),
+                Description = expectedDescription,
+                CreatedDate = expectedCreatedDate
+            };
+         
+            var actual = ViewModelFactory.CreateCommissionVM(commission);
+
+            Assert.AreEqual(expectedId, actual.Id);
+            Assert.AreEqual(expectedDescription, actual.Description);
+            Assert.AreEqual(expectedCreatedDate, actual.CreatedDate);
+        }
+
+        [TestMethod]
+        public void NoCommissionToSuggestionViewModel()
+        {
+            var viewModel = ViewModelFactory.CreateCommissionVM();
+
+            Assert.IsFalse(viewModel.Id == Guid.Empty);
+            Assert.IsTrue(string.IsNullOrEmpty(viewModel.Description));
+            Assert.AreEqual(DateTime.Today, viewModel.CreatedDate);
+        }
+
+        [TestMethod]
         public void CreateSuggestionViewModel()
         {
             var expectedId = Guid.NewGuid();
@@ -20,7 +51,7 @@ namespace ShirtStormTests
                 Description = expectedDescription,
                 CreatedDate = expectedCreatedDate
             };
-         
+
             var actual = ViewModelFactory.CreateSuggestionVM(suggestion);
 
             Assert.AreEqual(expectedId, actual.Id);

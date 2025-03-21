@@ -62,5 +62,20 @@ namespace ShirtStormMvc.Rules
         {
             return new SuggestionViewModel { Id = Guid.NewGuid(), Description = string.Empty, CreatedDate = DateTime.Today };
         }
+
+        public static CommissionViewModel CreateCommissionVM(Commission commission)
+        {
+            return new CommissionViewModel 
+            {
+                Id = commission.Id,
+                Description = commission.Description ?? string.Empty,
+                CreatedDate = commission.CreatedDate ?? DateTime.Today
+            };
+        }
+
+        public static CommissionViewModel CreateCommissionVM()
+        {
+            return new CommissionViewModel { Id = Guid.NewGuid(), Description = string.Empty, CreatedDate = DateTime.Today };
+        }
     }
 }

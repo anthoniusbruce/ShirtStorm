@@ -1,0 +1,38 @@
+﻿@model List<CommissionViewModel>
+<p>Submit your ideas for your own designs here. I'll get back to you if your design is something I make real for you. Prices start at $15 per t-shirt. Keep in mind that 1 color prints will turn out best. Describe your design below. Include all details like shirt color, ink color, shirt styles and shirt sizes.'.</p>
+<div class="col-sm-12 address-table-div" id="address-control-replacement">
+	<table class="table address-table">
+		<tr>
+			<th class="address-table-column-15">Date</th>
+			<th class="address-table-column-70">Description</th>
+			<th class="address-table-column-15"><a href="#" onclick="commissionUpdateBlock();">Add</a></th>
+		</tr>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
+				<td>@Html.DisplayFor(modelItem => item.Description)</td>
+				<td><a href="#" onclick="commissionUpdateBlock('@item.Id');">Edit</a> | <a asp-controller="UpcomingDesigns" asp-action="CommissionDelete" asp-route-id="@item.Id">Delete</a></td>
+			</tr>
+		}
+	</table>
+</div>
+
+<script type="text/javascript">
+	var commissionUpdateBlock = function(itemId) {
+		// do loading
+		$.ajax({
+			url: '@Url.Action("CommissionUpdateBlock", "UpcomingDesigns")',
+			type: 'GET',
+			data: {
+				id: itemId
+			},
+			success: function (data) {
+				$('#address-control-replacement').html(data);
+			},
+			error: function() {
+				$('#address-control-replacement').html("Sorry! Commissions are not available at this time. :(");
+			}
+		});
+	};
+</script>

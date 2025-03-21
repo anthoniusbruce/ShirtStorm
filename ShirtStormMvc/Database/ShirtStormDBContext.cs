@@ -14,5 +14,6 @@ namespace ShirtStormMvc.Database
         public DbSet<Customer> Customers { get; set; } = default!;
         public DbSet<Address> Addresses { get; set; } = default!;
         public DbSet<Suggestion> Suggestions { get; set; } = default!;
+        public DbSet<Commission> Commissions { get; set; } = default!;
     }
 }
