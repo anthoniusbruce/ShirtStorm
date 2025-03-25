@@ -36,7 +36,7 @@ if (files.Count == 0)
 foreach (var imageFile in files)
 {
 
-    string queryStmt = "INSERT INTO dbo.Images(ID, Bytes) VALUES(@ImageId, @Bytes); INSERT INTO dbo.Designs(Id, Title, ImageId, DisplayOnFrontPage, Description, ReleaseDate) VALUES(@DesignId, @Title, @ImageId, @DisplayOnFrontPage, @Description, @ReleaseDate)";
+    string queryStmt = "INSERT INTO dbo.Images(ID, Bytes) VALUES(@ImageId, @Bytes); INSERT INTO dbo.Designs(Id, Title, ImageId, DisplayOnFrontPage, Description) VALUES(@DesignId, @Title, @ImageId, @DisplayOnFrontPage, @Description)";
 
     using (SqlConnection con = new SqlConnection(connectionString))
     using (SqlCommand cmd = new SqlCommand(queryStmt, con))
@@ -62,11 +62,9 @@ foreach (var imageFile in files)
         param = cmd.Parameters.Add("@Title", SqlDbType.NVarChar);
         param.Value = title;
         param = cmd.Parameters.Add("@DisplayOnFrontPage", SqlDbType.Bit);
-        param.Value = 1;
+        param.Value = 0;
         param = cmd.Parameters.Add("@Description", SqlDbType.NVarChar);
         param.Value = desc;
-        param = cmd.Parameters.Add("@ReleaseDate", SqlDbType.DateTime2);
-        param.Value = new DateTime(2024, 12, 31);
 
         try
         {
