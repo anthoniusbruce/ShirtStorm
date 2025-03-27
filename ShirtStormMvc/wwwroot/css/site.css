@@ -187,6 +187,32 @@ body {
         text-decoration-line:none;
     }
 
+.upcoming {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4px;
+    align-items: center;
+}
+
+.upcoming-col-20 {
+    flex: 20%;
+    min-width: 250px;
+    max-width: 33%;
+    vertical-align: top;
+}
+
+.upcoming-col-20 > img {
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+}
+
+.upcoming-col-60 {
+    flex: 60%;
+    min-width: 200px;
+    max-width: 60%;
+}
+
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
     color: var(--bs-secondary-color);
     text-align: end;
