@@ -108,6 +108,11 @@ namespace ShirtStormMvc.Controllers
             return ViewComponent("Commissions", commissionSummaryViewModel);
         }
 
+        public async Task<IActionResult> Upcoming()
+        {
+            return ViewComponent("Upcoming");
+        }
+
         public async Task<IActionResult> AddressUpdateBlock(Guid? id)
         {
             AddressViewModel? addressViewModel = null;
