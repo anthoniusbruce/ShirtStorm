@@ -2,7 +2,7 @@
 
 namespace ShirtStormCommon.Models
 {
-    public class OrderItems
+    public class OrderItem
     {
         [Key]
         public Guid Id { get; set; }
