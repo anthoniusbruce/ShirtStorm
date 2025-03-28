@@ -10,6 +10,6 @@ namespace ShirtStormCommon.Models
         public Guid DesignId { get; set; }
         public Guid ShirtId { get; set; }
         public Guid AddressId { get; set; }
-        public string? WnoFor { get; set; }
+        public string? WhoFor { get; set; }
     }
 }
