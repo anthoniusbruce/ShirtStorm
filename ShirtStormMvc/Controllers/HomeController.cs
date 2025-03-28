@@ -24,7 +24,7 @@ public class HomeController : Controller
         return View();
     }
 
-    public async Task<IActionResult> LoadFrontPageList()
+    public IActionResult LoadFrontPageList()
     {
         var query = from design in _dbContext.Designs
                     where design.DisplayOnFrontPage == true
@@ -35,7 +35,7 @@ public class HomeController : Controller
         var designs = query.ToListAsync();
 
 
-        return ViewComponent("FrontPageList", await designs);
+        return ViewComponent("FrontPageList", designs);
     }
 
     public IActionResult Privacy()

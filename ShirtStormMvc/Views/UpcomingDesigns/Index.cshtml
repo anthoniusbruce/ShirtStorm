@@ -65,12 +65,12 @@ else
 {
     @await Component.InvokeAsync("Preamble", "Take a peek at some of our upcoming designs below and get ready to weather the storm… one shirt at a time!")
 }
-<div id="upcoming-space">
+<div id="comingup-space">
     Loading Upcoming Designs...
 </div>
 
 <script type="text/javascript">
-    var callback = function() {
+    var addressCallback = function() {
         // do loading of address space
         $.ajax({
             url: '@Url.Action(@controllerMethod, "UpcomingDesigns")',
@@ -82,22 +82,27 @@ else
                 $('#address-space').html("Sorry! @sorryMessage are not available at this time. :(");
             }
         });
+    };
+
+    var comingUpCallback = function() {
         // do loading of upcoming designs
         $.ajax({
-            url: '@Url.Action("Upcoming", "UpcomingDesigns")',
+            url: '@Url.Action("ComingUp", "UpcomingDesigns")',
             type: 'GET',
             success: function (data) {
-                $('#upcoming-space').html(data);
+                $('#comingup-space').html(data);
             },
             error: function() {
-                $('#upcoming-space').html("Sorry! Upcoming designs are not available at this time. :(");
+                $('#comingup-space').html("Sorry! Upcoming designs are not available at this time. :(");
             }
         });
     };
 
     if (document.readyState === "complete") {
-        callback();
+        addressCallback();
+        comingUpCallback();
     } else {
-        document.addEventListener("DOMContentLoaded", callback);
+        document.addEventListener("DOMContentLoaded", addressCallback);
+        document.addEventListener("DOMContentLoaded", comingUpCallback);
     }
 </script>

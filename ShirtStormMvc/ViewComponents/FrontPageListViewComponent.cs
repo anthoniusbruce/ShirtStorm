@@ -14,8 +14,18 @@ namespace ShirtStormMvc.ViewComponents
         }
 
 
-        public IViewComponentResult Invoke(List<FrontPageDesignViewModel> designs)
+        public async Task<IViewComponentResult> InvokeAsync(Task<List<FrontPageDesignViewModel>> task)
         {
+            List<FrontPageDesignViewModel> designs = new List<FrontPageDesignViewModel>();
+            if (task == null)
+            {
+                designs = new List<FrontPageDesignViewModel>();
+            }
+            else
+            {
+                designs = await task ?? new List<FrontPageDesignViewModel>();
+            }
+
             return View(designs);
         }
     }

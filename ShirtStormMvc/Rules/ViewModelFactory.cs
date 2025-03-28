@@ -77,5 +77,15 @@ namespace ShirtStormMvc.Rules
         {
             return new CommissionViewModel { Id = Guid.NewGuid(), Description = string.Empty, CreatedDate = DateTime.Today };
         }
+
+        public static ComingUpViewModel CreateComingUpVM(Design design, Image image)
+        {
+            var ret = new ComingUpViewModel
+            {
+                Design = CreateFrontPageDesignVM(design, image)
+            };
+
+            return ret;
+        }
     }
 }

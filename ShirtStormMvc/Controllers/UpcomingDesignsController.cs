@@ -108,9 +108,18 @@ namespace ShirtStormMvc.Controllers
             return ViewComponent("Commissions", commissionSummaryViewModel);
         }
 
-        public async Task<IActionResult> Upcoming()
+        public async Task<IActionResult> ComingUp()
         {
-            return ViewComponent("Upcoming");
+            var customerId = await GetCustomerId();
+            var query = from design in _dbContext.Designs
+                        where design.ReleaseDate == null
+                        join image in _dbContext.Images
+                            on design.ImageId equals image.Id
+                        select ViewModelFactory.CreateComingUpVM(design, image);
+
+            var comingUp = query.ToListAsync();
+
+            return ViewComponent("ComingUp", comingUp);
         }
 
         public async Task<IActionResult> AddressUpdateBlock(Guid? id)

@@ -8,6 +8,41 @@ namespace ShirtStormTests
     public sealed class ViewModelFactoryTests
     {
         [TestMethod]
+        public void CreateUpcomingnModel()
+        {
+            var imageId = Guid.NewGuid();
+            var bytes = Encoding.UTF8.GetBytes("Bytes");
+            var expectedImageSource = $"data:image/jpeg;base64,{Convert.ToBase64String(bytes)}";
+            var designId = new Guid();
+            var expDescription = "description";
+            var displayOnFrontPage = true;
+            var expTitle = "title";
+            var releaseDate = DateTime.Now;
+            var expectedOrderTotal = 0;
+            var image = new Image
+            {
+                Id = imageId,
+                Bytes = bytes
+            };
+            var design = new Design
+            {
+                Id = designId,
+                Description = expDescription,
+                DisplayOnFrontPage = displayOnFrontPage,
+                Title = expTitle,
+                ImageId = imageId,
+                ReleaseDate = releaseDate,
+            };
+
+            var actual = ViewModelFactory.CreateComingUpVM(design, image);
+
+            Assert.AreEqual(expDescription, actual.Design.Description);
+            Assert.AreEqual(expTitle, actual.Design.Title);
+            Assert.AreEqual(expectedImageSource, actual.Design.ImageSource);
+            Assert.AreEqual(expectedOrderTotal, actual.OrderTotal);
+        }
+
+        [TestMethod]
         public void CreateCommissionViewModel()
         {
             var expectedId = Guid.NewGuid();
@@ -29,7 +64,7 @@ namespace ShirtStormTests
         }
 
         [TestMethod]
-        public void NoCommissionToSuggestionViewModel()
+        public void NoCommissionToCommisionViewModel()
         {
             var viewModel = ViewModelFactory.CreateCommissionVM();
 

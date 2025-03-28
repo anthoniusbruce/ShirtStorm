@@ -1,0 +1,14 @@
+﻿@model List<ComingUpViewModel>
+
+<div>
+	@for (int i = 0; i < Model.Count(); ++i)
+	{
+		<div class="upcoming-row">
+			<div class="upcoming-col-20">
+				<img src="@Model[i].Design.ImageSource" alt="@Model[i].Design.Title" />
+			</div>
+			<div class="upcoming-col-60">@Model[i].Design.Description</div>
+			<div class="upcoming-col-20"><h1>Number of shirts:</h1><br /><h2 style="align-items:center">@Model[i].OrderTotal</h2></div>
+		</div>
+	}
+</div>
