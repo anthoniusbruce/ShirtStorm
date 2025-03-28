@@ -84,7 +84,7 @@ body {
     overflow-y: auto;
     height: 250px;
 }
-.address-table-dv thead th {
+.address-table-div thead th {
     position: sticky;
     top: 0px;
 }
