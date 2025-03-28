@@ -8,7 +8,20 @@
 				<img src="@Model[i].Design.ImageSource" alt="@Model[i].Design.Title" />
 			</div>
 			<div class="upcoming-col-60">@Model[i].Design.Description</div>
-			<div class="upcoming-col-20"><h1>Number of shirts:</h1><br /><h2 style="align-items:center">@Model[i].OrderTotal</h2></div>
+			<div class="upcoming-col-20 order">
+				<h1>Order:</h1>
+				<div class="centered">
+					@if (Model[i].OrderTotal == 1) 
+					{
+						<h2> @Model[i].OrderTotal shirt</h2>
+					}
+					else
+					{
+						<h2> @Model[i].OrderTotal shirts</h2>
+
+					}
+				</div>
+			</div>
 		</div>
 	}
 </div>

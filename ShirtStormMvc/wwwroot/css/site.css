@@ -190,15 +190,24 @@ body {
 .upcoming-row {
     display: flex;
     flex-wrap: wrap;
-    padding: 0 4px;
-    align-items: center;
+    padding: 10px 4px;
 }
 
 .upcoming-col-20 {
     flex: 20%;
-    min-width: 250px;
+    min-width: 200px;
+    min-height: 250px;
     max-width: 33%;
-    vertical-align: top;
+}
+
+    .upcoming-col-20.order {
+        border: 10px solid #808080;
+        padding-left: 15px;
+        align-content: center;
+    }
+
+.upcoming-col-20 > div.centered {
+    text-align: center;
 }
 
 .upcoming-col-20 > img {
@@ -208,9 +217,12 @@ body {
 }
 
 .upcoming-col-60 {
+    display: flex;
     flex: 60%;
-    min-width: 200px;
+    min-width: 250px;
     max-width: 60%;
+    padding: 5px 10px 5px 10px;
+    align-items: center;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
