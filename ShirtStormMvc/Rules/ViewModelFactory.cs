@@ -82,10 +82,27 @@ namespace ShirtStormMvc.Rules
         {
             var ret = new ComingUpViewModel
             {
-                Design = CreateFrontPageDesignVM(design, image)
+                Design = CreateFrontPageDesignVM(design, image),
+                DesignId = design.Id,
             };
 
             return ret;
+        }
+
+        public static OrderItemSummaryViewModel CreateOrderItemSummaryViewModel(OrderItem orderItem, List<Shirt> shirts, List<Address> addresses)
+        {
+            var model = new OrderItemSummaryViewModel
+            {
+                Id = orderItem.Id,
+                WhoFor = orderItem.WhoFor
+            };
+
+            var shirt = shirts.Find(x => x.Id == orderItem.ShirtId);
+            model.Size = shirt!.Size;
+            var address = addresses.Find(x => x.Id == orderItem.AddressId);
+            model.AddressAlias = address!.Alias;
+
+            return model;
         }
     }
 }

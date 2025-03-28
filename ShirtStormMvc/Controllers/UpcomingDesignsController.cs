@@ -15,6 +15,49 @@ namespace ShirtStormMvc.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ShirtStormDbContext _dbContext;
+        private static List<Shirt> _shirts = new List<Shirt>
+        {
+            new Shirt {Id = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"), Brand = "Gildan", Model="G500", Size="S"},
+            new Shirt {Id = new Guid("AEA43BBA-8E2E-422B-899A-FFFD527348E8"), Brand = "Gildan", Model="G500", Size="M"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500", Size="L"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500", Size="XL"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500", Size="2XL"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500", Size="3XL"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500", Size="4XL"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500", Size="5XL"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500VL", Size="Ladies V-Neck S"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500VL", Size="Ladies V-Neck M"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500VL", Size="Ladies V-Neck L"},
+            new Shirt {Id = new Guid("FD2E5A43-2E42-4D3E-9B91-7CC01984EB42"), Brand = "Gildan", Model="G500VL", Size="Ladies V-Neck XL"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500VL", Size="Ladies V-Neck 2XL"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500VL", Size="Ladies V-Neck 3XL"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500L", Size="Ladies S"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500L", Size="Ladies M"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500L", Size="Ladies L"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500L", Size="Ladies XL"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500L", Size="Ladies 2XL"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500L", Size="Ladies 3XL"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500B", Size="Youth XS"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500B", Size="Youth S"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500B", Size="Youth M"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500B", Size="Youth L"},
+            new Shirt {Id = Guid.NewGuid(), Brand = "Gildan", Model="G500B", Size="Youth XL"},
+        };
+        private static List<Address> _addresses = new List<Address>
+        {
+            new Address {Id = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"), Alias = "Alias 1", CustomerGuid = new Guid(), Recipient = "Recipient 1", StreetAddress1 = "street address 1", CityStateZip = "csz 1" },
+            new Address {Id = new Guid("9C4BBC9F-241F-4AE3-A48B-89E64C5B12A8"), Alias = "Alias 2", CustomerGuid = new Guid(), Recipient = "Recipient 2", StreetAddress1 = "street address 2", CityStateZip = "csz 2" },
+            new Address {Id = Guid.NewGuid(), Alias = "Alias 3", CustomerGuid = new Guid(), Recipient = "Recipient 3", StreetAddress1 = "street address 3", CityStateZip = "csz 3" },
+            new Address {Id = Guid.NewGuid(), Alias = "Alias 4", CustomerGuid = new Guid(), Recipient = "Recipient 4", StreetAddress1 = "street address 4", CityStateZip = "csz 4" },
+        };
+
+        private static List<OrderItem> _orderItems = new List<OrderItem>
+        {
+            new OrderItem {Id = Guid.NewGuid(), AddressId = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"), CustomerId = new Guid(), DesignId = new Guid(), ShirtId = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"), WhoFor = "Who for 1" },
+            new OrderItem {Id = Guid.NewGuid(), AddressId = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"), CustomerId = new Guid(), DesignId = new Guid(), ShirtId = new Guid("AEA43BBA-8E2E-422B-899A-FFFD527348E8"), WhoFor = "Who for 2" },
+            new OrderItem {Id = Guid.NewGuid(), AddressId = new Guid("9C4BBC9F-241F-4AE3-A48B-89E64C5B12A8"), CustomerId = new Guid(), DesignId = new Guid(), ShirtId = new Guid("FD2E5A43-2E42-4D3E-9B91-7CC01984EB42"), WhoFor = "Who for 3" },
+            new OrderItem {Id = Guid.NewGuid(), AddressId = new Guid("9C4BBC9F-241F-4AE3-A48B-89E64C5B12A8"), CustomerId = new Guid(), DesignId = new Guid(), ShirtId = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"), WhoFor = "Who for 4" },
+        };
 
         public UpcomingDesignsController(ILogger<HomeController> logger, ShirtStormDbContext dbContext)
         {
@@ -106,6 +149,18 @@ namespace ShirtStormMvc.Controllers
             }
 
             return ViewComponent("Commissions", commissionSummaryViewModel);
+        }
+
+        public async Task<IActionResult> OrderViewCrud()
+        {
+            var orderItemSummaryViewModel = new List<OrderItemSummaryViewModel>();
+            foreach (var item in _orderItems)
+            {
+                orderItemSummaryViewModel.Add(ViewModelFactory.CreateOrderItemSummaryViewModel(item, _shirts, _addresses));
+            }
+
+// Add Orders view component next
+            return ViewComponent("Orders", orderItemSummaryViewModel);
         }
 
         public async Task<IActionResult> ComingUp()

@@ -7,9 +7,9 @@
 			<div class="upcoming-col-20">
 				<img src="@Model[i].Design.ImageSource" alt="@Model[i].Design.Title" />
 			</div>
-			<div class="upcoming-col-60">@Model[i].Design.Description</div>
+			<div class="upcoming-col-60" id="description-control-replacement">@Model[i].Design.Description</div>
 			<div class="upcoming-col-20 order">
-				<h1>Order:</h1>
+				<h1><a href="#" onclick="orderUpdateBlock(@Model[i].DesignId);">Order:</a></h1>
 				<div class="centered">
 					@if (Model[i].OrderTotal == 1) 
 					{
@@ -25,3 +25,22 @@
 		</div>
 	}
 </div>
+
+<script type="text/javascript">
+	var orderUpdateBlock = function(itemId) {
+		// do loading
+		$.ajax({
+			url: '@Url.Action("OrderViewCrud", "UpcomingDesigns")',
+			type: 'GET',
+			data: {
+				id: itemId
+			},
+			success: function (data) {
+				$('#description-control-replacement').html(data);
+			},
+			error: function() {
+				$('#description-control-replacement').html("Sorry! Orders are not available at this time. :(");
+			}
+		});
+	};
+</script>
