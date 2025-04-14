@@ -78,9 +78,9 @@ namespace ShirtStormMvc.Rules
             return new CommissionViewModel { Id = Guid.NewGuid(), Description = string.Empty, CreatedDate = DateTime.Today };
         }
 
-        public static ComingUpViewModel CreateComingUpVM(Design design, Image image)
+        public static ProductViewModel CreateProductVM(Design design, Image image)
         {
-            var ret = new ComingUpViewModel
+            var ret = new ProductViewModel
             {
                 Design = CreateFrontPageDesignVM(design, image),
                 DesignId = design.Id,

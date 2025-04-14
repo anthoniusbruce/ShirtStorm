@@ -217,7 +217,7 @@ namespace ShirtStormTests
                 ReleaseDate = releaseDate,
             };
 
-            var actual = ViewModelFactory.CreateComingUpVM(design, image);
+            var actual = ViewModelFactory.CreateProductVM(design, image);
 
             Assert.AreEqual(expectedDesignId, actual.DesignId);
             Assert.AreEqual(expDescription, actual.Design.Description);

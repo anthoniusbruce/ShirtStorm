@@ -65,7 +65,7 @@ else
 {
     @await Component.InvokeAsync("Preamble", "Take a peek at some of our upcoming designs below and get ready to weather the storm… one shirt at a time!")
 }
-<div id="comingup-space">
+<div id="products-space">
     Loading Upcoming Designs...
 </div>
 
@@ -84,25 +84,25 @@ else
         });
     };
 
-    var comingUpCallback = function() {
+    var productsCallback = function() {
         // do loading of upcoming designs
         $.ajax({
-            url: '@Url.Action("ComingUp", "UpcomingDesigns")',
+            url: '@Url.Action("Products", "UpcomingDesigns")',
             type: 'GET',
             success: function (data) {
-                $('#comingup-space').html(data);
+                $('#products-space').html(data);
             },
             error: function() {
-                $('#comingup-space').html("Sorry! Upcoming designs are not available at this time. :(");
+                $('#products-space').html("Sorry! Upcoming designs are not available at this time. :(");
             }
         });
     };
 
     if (document.readyState === "complete") {
         addressCallback();
-        comingUpCallback();
+        productsCallback();
     } else {
         document.addEventListener("DOMContentLoaded", addressCallback);
-        document.addEventListener("DOMContentLoaded", comingUpCallback);
+        document.addEventListener("DOMContentLoaded", productsCallback);
     }
 </script>

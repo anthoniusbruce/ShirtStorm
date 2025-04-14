@@ -1,6 +1,6 @@
 ﻿namespace ShirtStormMvc.Models
 {
-    public class ComingUpViewModel
+    public class ProductViewModel
     {
         public required FrontPageDesignViewModel Design { get; set; }
         public required Guid DesignId { get; set; }

@@ -1,6 +1,6 @@
 ﻿@{
-	var pData = ViewData["Products"] as Task<List<ComingUpViewModel>>;
-	List<ComingUpViewModel> products = pData == null ? new List<ComingUpViewModel>() : await pData;
+	var pData = ViewData["Products"] as Task<List<ProductViewModel>>;
+	List<ProductViewModel> products = pData == null ? new List<ProductViewModel>() : await pData;
 
 	var cData = ViewData["Cart"] as CartViewModel;
 	CartViewModel cart = cData == null ? new CartViewModel { OrderItems = new List<OrderItemSummaryViewModel>() } : cData;
