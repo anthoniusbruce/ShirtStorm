@@ -6,6 +6,7 @@
     const string destinations = "Destinations";
     const string suggestions = "Suggestions";
     const string commissions = "Commissions";
+    string? returnTo = ViewData["ReturnTo"] as string ?? "";
     string? addressType = ViewData["addressType"] as string;
     string controllerMethod = "AddressViewCrud";
     string sorryMessage = "Addresses";
@@ -91,9 +92,13 @@ else
             type: 'GET',
             success: function (data) {
                 $('#products-space').html(data);
+                var retTo = '@returnTo';
+                if (retTo != "") {
+                    document.getElementById(retTo).scrollIntoView({behavior: 'instant'});
+                }
             },
             error: function() {
-                $('#products-space').html("Sorry! Upcoming designs are not available at this time. :(");
+                $('#products-space').html("Sorry! Product designs are not available at this time. :(");
             }
         });
     };

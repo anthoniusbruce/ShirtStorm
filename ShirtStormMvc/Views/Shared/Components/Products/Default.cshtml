@@ -13,7 +13,7 @@
 			<div class="upcoming-col-20">
 				<img src="@products[i].Design.ImageSource" alt="@products[i].Design.Title" />
 			</div>
-			<div class="upcoming-col-60" id="description-control-replacement">
+			<div class="upcoming-col-60" id="@products[i].DesignId">
 				<div>
 					<p><i>@products[i].Design.Title</i>, @products[i].Design.Description</p>
 					<div class="col-sm-12 address-table-div" id="order-grid-replacement">
@@ -23,7 +23,7 @@
 									<th>Whom For</th>
 									<th>Shirt Size</th>
 									<th>Send To</th>
-									<th class="address-table-column-15"><a href="#" onclick="OrderUpdateBlock();">Add Shirt</a></th>
+									<th class="address-table-column-15"><a href="#" onclick="orderUpdateBlock(orderBlock:'@products[i].DesignId');">Add Shirt</a></th>
 								</tr>
 							</thead>
 							@foreach (var item in cart.OrderItems)
@@ -32,7 +32,7 @@
 									<td>@Html.DisplayFor(modelItem => item.WhoFor)</td>
 									<td>@Html.DisplayFor(modelItem => item.Size)</td>
 									<td>@Html.DisplayFor(modelItem => item.AddressAlias)</td>
-									<td><a href="#" onclick="orderUpdateBlock('@item.Id');">Edit</a> | <a asp-controller="UpcomingDesigns" asp-action="OrderItemDelete" asp-route-id="@item.Id">Delete</a></td>
+									<td><a href="#" onclick="orderUpdateBlock(orderBlock:'@products[i].DesignId',itemId:'@item.Id');">Edit</a> | <a asp-controller="UpcomingDesigns" asp-action="OrderItemDelete" asp-route-id="@item.Id" asp-route-returnTo="@products[i].DesignId">Delete</a></td>
 								</tr>
 							}
 						</table>
@@ -40,7 +40,7 @@
 				</div>
 			</div>
 			<div class="upcoming-col-20 order">
-				<h1><a href="#" onclick="orderUpdateBlock('@products[i].DesignId');">Shirts:</a></h1>
+				<h1>Shirts:</h1>
 				<div class="centered">
 					@if (products[i].OrderTotal == 1) 
 					{
@@ -58,7 +58,7 @@
 </div>
 
 <script type="text/javascript">
-	var orderUpdateBlock = function(itemId) {
+	var orderUpdateBlock = function(orderBlock, itemId) {
 		// do loading
 		$.ajax({
 			url: '@Url.Action("OrderUpdateBlock", "UpcomingDesigns")',
@@ -67,10 +67,10 @@
 				id: itemId
 			},
 			success: function (data) {
-				$('#description-control-replacement').html(data);
+				$('#'+orderBlock).html(data);
 			},
 			error: function() {
-				$('#description-control-replacement').html("Sorry! Orders are not available at this time. :(");
+				$('#'+orderBlock).html("Sorry! Orders are not available at this time. :(");
 			}
 		});
 	};

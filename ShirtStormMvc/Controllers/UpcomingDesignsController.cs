@@ -65,7 +65,7 @@ namespace ShirtStormMvc.Controllers
             _dbContext = dbContext;
         }
 
-        public async Task<IActionResult> Index(string? addressType)
+        public async Task<IActionResult> Index(string? addressType, string? returnTo)
         {
             var upcomingModel = new UpcomingDesignsViewModel();
 
@@ -101,6 +101,11 @@ namespace ShirtStormMvc.Controllers
             if (addressType == "Suggestions" || addressType == "Commissions")
             {
                 ViewData["addressType"] = addressType;
+            }
+
+            if (!string.IsNullOrWhiteSpace(returnTo))
+            {
+                ViewData["ReturnTo"] = returnTo;
             }
 
             return View(upcomingModel);
@@ -338,9 +343,21 @@ namespace ShirtStormMvc.Controllers
             return RedirectToAction(nameof(Index), new { addressType = "Commissions" });
         }
 
+        public async Task<IActionResult> OrderItemDelete(Guid id, Guid returnTo)
+        {
+            _orderItems.RemoveAll(x => x.Id == id);
+
+            return RedirectToAction(nameof(Index), new { returnTo = returnTo.ToString("D")});
+        }
+
         public IActionResult Cancel(string? addressType)
         {
             return RedirectToAction(nameof(Index), new { addressType });
+        }
+
+        public IActionResult CancelOrderChanges(Guid returnTo)
+        {
+            return RedirectToAction(nameof(Index), new { returnTo = returnTo.ToString("D")});
         }
 
         private async Task<Address?> GetAddress(Guid? id, Guid customerId)
