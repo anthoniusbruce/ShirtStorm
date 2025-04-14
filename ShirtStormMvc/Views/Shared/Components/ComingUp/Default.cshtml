@@ -1,23 +1,54 @@
-﻿@model List<ComingUpViewModel>
+﻿@{
+	var pData = ViewData["Products"] as Task<List<ComingUpViewModel>>;
+	List<ComingUpViewModel> products = pData == null ? new List<ComingUpViewModel>() : await pData;
+
+	var cData = ViewData["Cart"] as CartViewModel;
+	CartViewModel cart = cData == null ? new CartViewModel { OrderItems = new List<OrderItemSummaryViewModel>() } : cData;
+}
 
 <div>
-	@for (int i = 0; i < Model.Count(); ++i)
+	@for (int i = 0; i < products.Count(); ++i)
 	{
 		<div class="upcoming-row">
 			<div class="upcoming-col-20">
-				<img src="@Model[i].Design.ImageSource" alt="@Model[i].Design.Title" />
+				<img src="@products[i].Design.ImageSource" alt="@products[i].Design.Title" />
 			</div>
-			<div class="upcoming-col-60" id="description-control-replacement">@Model[i].Design.Description</div>
+			<div class="upcoming-col-60" id="description-control-replacement">
+				<div>
+					<p><i>@products[i].Design.Title</i>, @products[i].Design.Description</p>
+					<div class="col-sm-12 address-table-div" id="order-grid-replacement">
+						<table class="table address-table">
+							<thead>
+								<tr>
+									<th>Whom For</th>
+									<th>Shirt Size</th>
+									<th>Send To</th>
+									<th class="address-table-column-15"><a href="#" onclick="OrderUpdateBlock();">Add Shirt</a></th>
+								</tr>
+							</thead>
+							@foreach (var item in cart.OrderItems)
+							{
+								<tr>
+									<td>@Html.DisplayFor(modelItem => item.WhoFor)</td>
+									<td>@Html.DisplayFor(modelItem => item.Size)</td>
+									<td>@Html.DisplayFor(modelItem => item.AddressAlias)</td>
+									<td><a href="#" onclick="orderUpdateBlock('@item.Id');">Edit</a> | <a asp-controller="UpcomingDesigns" asp-action="OrderItemDelete" asp-route-id="@item.Id">Delete</a></td>
+								</tr>
+							}
+						</table>
+					</div>
+				</div>
+			</div>
 			<div class="upcoming-col-20 order">
-				<h1><a href="#" onclick="orderUpdateBlock(@Model[i].DesignId);">Order:</a></h1>
+				<h1><a href="#" onclick="orderUpdateBlock('@products[i].DesignId');">Shirts:</a></h1>
 				<div class="centered">
-					@if (Model[i].OrderTotal == 1) 
+					@if (products[i].OrderTotal == 1) 
 					{
-						<h2> @Model[i].OrderTotal shirt</h2>
+						<h2> @products[i].OrderTotal shirt</h2>
 					}
 					else
 					{
-						<h2> @Model[i].OrderTotal shirts</h2>
+						<h2> @products[i].OrderTotal shirts</h2>
 
 					}
 				</div>
@@ -30,7 +61,7 @@
 	var orderUpdateBlock = function(itemId) {
 		// do loading
 		$.ajax({
-			url: '@Url.Action("OrderViewCrud", "UpcomingDesigns")',
+			url: '@Url.Action("OrderUpdateBlock", "UpcomingDesigns")',
 			type: 'GET',
 			data: {
 				id: itemId

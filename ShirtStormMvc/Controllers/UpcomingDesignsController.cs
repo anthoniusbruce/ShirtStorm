@@ -151,18 +151,6 @@ namespace ShirtStormMvc.Controllers
             return ViewComponent("Commissions", commissionSummaryViewModel);
         }
 
-        public async Task<IActionResult> OrderViewCrud()
-        {
-            var orderItemSummaryViewModel = new List<OrderItemSummaryViewModel>();
-            foreach (var item in _orderItems)
-            {
-                orderItemSummaryViewModel.Add(ViewModelFactory.CreateOrderItemSummaryViewModel(item, _shirts, _addresses));
-            }
-
-// Add Orders view component next
-            return ViewComponent("Orders", orderItemSummaryViewModel);
-        }
-
         public async Task<IActionResult> ComingUp()
         {
             var customerId = await GetCustomerId();
@@ -174,7 +162,15 @@ namespace ShirtStormMvc.Controllers
 
             var comingUp = query.ToListAsync();
 
-            return ViewComponent("ComingUp", comingUp);
+            var cartItems = (from item in _orderItems select ViewModelFactory.CreateOrderItemSummaryViewModel(item, _shirts, _addresses)).ToList();
+
+            ViewData["Products"] = comingUp;
+            ViewData["Cart"] = new CartViewModel
+            {
+                OrderItems = cartItems
+            };
+
+            return ViewComponent("ComingUp");
         }
 
         public async Task<IActionResult> AddressUpdateBlock(Guid? id)
