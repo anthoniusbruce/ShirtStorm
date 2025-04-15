@@ -3,6 +3,7 @@
     public class ProductViewModel
     {
         public required FrontPageDesignViewModel Design { get; set; }
+        public required List<OrderItemSummaryViewModel> OrderItems { get; set; }
         public required Guid DesignId { get; set; }
         public int OrderTotal { get; set; }
     }

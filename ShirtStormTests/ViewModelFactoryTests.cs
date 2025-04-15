@@ -13,6 +13,7 @@ namespace ShirtStormTests
             var expectedWhoFor = "Who For 1";
             var expectedSize = "S";
             var expectedAddressAlias = "Alias 2";
+            var expectedDesignId = Guid.NewGuid();
             var shirts = new List<Shirt>
             {
                 new Shirt {Id = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"), Brand = "Gildan", Model="G500", Size=expectedSize},
@@ -53,8 +54,8 @@ namespace ShirtStormTests
             {
                 Id = Guid.NewGuid(),
                 AddressId = new Guid("9C4BBC9F-241F-4AE3-A48B-89E64C5B12A8"),
-                CustomerId = new Guid(),
-                DesignId = new Guid(),
+                OrderId = new Guid(),
+                DesignId = expectedDesignId,
                 ShirtId = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"),
                 WhoFor = expectedWhoFor
             };
@@ -66,6 +67,7 @@ namespace ShirtStormTests
             Assert.AreEqual(expectedWhoFor, actual.WhoFor);
             Assert.AreEqual(expectedSize, actual.Size);
             Assert.AreEqual(expectedAddressAlias, actual.AddressAlias);
+            Assert.AreEqual(expectedDesignId, actual.DesignId);
         }
 
         [TestMethod]
@@ -74,6 +76,7 @@ namespace ShirtStormTests
             var expectedWhoFor = "Who For 2";
             var expectedSize = "M";
             var expectedAddressAlias = "Alias 1";
+            var expectedDesignId = Guid.NewGuid();
             var shirts = new List<Shirt>
             {
                 new Shirt {Id = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"), Brand = "Gildan", Model="G500", Size="S"},
@@ -114,8 +117,8 @@ namespace ShirtStormTests
             { 
                 Id = Guid.NewGuid(), 
                 AddressId = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"), 
-                CustomerId = new Guid(), 
-                DesignId = new Guid(), 
+                OrderId = new Guid(), 
+                DesignId = expectedDesignId, 
                 ShirtId = new Guid("AEA43BBA-8E2E-422B-899A-FFFD527348E8"), 
                 WhoFor = expectedWhoFor
             };
@@ -127,6 +130,7 @@ namespace ShirtStormTests
             Assert.AreEqual(expectedWhoFor, actual.WhoFor);
             Assert.AreEqual(expectedSize, actual.Size);
             Assert.AreEqual(expectedAddressAlias, actual.AddressAlias);
+            Assert.AreEqual(expectedDesignId, actual.DesignId);
         }
 
         [TestMethod]
@@ -135,6 +139,7 @@ namespace ShirtStormTests
             var expectedWhoFor = "Who For 3";
             var expectedSize = "Ladies V-Neck XL";
             var expectedAddressAlias = "Alias 2";
+            var expectedDesignId = Guid.NewGuid();
             var shirts = new List<Shirt>
             {
                 new Shirt {Id = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"), Brand = "Gildan", Model="G500", Size="S"},
@@ -175,8 +180,8 @@ namespace ShirtStormTests
             {
                 Id = Guid.NewGuid(), 
                 AddressId = new Guid("9C4BBC9F-241F-4AE3-A48B-89E64C5B12A8"), 
-                CustomerId = new Guid(), 
-                DesignId = new Guid(), 
+                OrderId = new Guid(), 
+                DesignId = expectedDesignId, 
                 ShirtId = new Guid("FD2E5A43-2E42-4D3E-9B91-7CC01984EB42"), 
                 WhoFor = expectedWhoFor 
             };
@@ -188,10 +193,11 @@ namespace ShirtStormTests
             Assert.AreEqual(expectedWhoFor, actual.WhoFor);
             Assert.AreEqual(expectedSize, actual.Size);
             Assert.AreEqual(expectedAddressAlias, actual.AddressAlias);
+            Assert.AreEqual(expectedDesignId, actual.DesignId);
         }
 
         [TestMethod]
-        public void CreateUpcomingnModel()
+        public void CreateProductModel()
         {
             var imageId = Guid.NewGuid();
             var bytes = Encoding.UTF8.GetBytes("Bytes");
@@ -202,6 +208,9 @@ namespace ShirtStormTests
             var expTitle = "title";
             var releaseDate = DateTime.Now;
             var expectedOrderTotal = 0;
+            var expectedAlias = "Alias 1";
+            var expectedSize = "S";
+            var expectedWhoFor = "Me";
             var image = new Image
             {
                 Id = imageId,
@@ -216,14 +225,123 @@ namespace ShirtStormTests
                 ImageId = imageId,
                 ReleaseDate = releaseDate,
             };
+            var shirts = new List<Shirt>
+            {
+                new Shirt {Id = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"), Brand = "Gildan", Model="G500", Size=expectedSize},
+            };
+            var addresses = new List<Address>
+            {
+                new Address {Id = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"), Alias = expectedAlias, CustomerGuid = new Guid(), Recipient = "Recipient 1", StreetAddress1 = "street address 1", CityStateZip = "csz 1" },
+            };
+            var orderList = new List<OrderItem>
+            {
+                new OrderItem
+                {
+                    Id = Guid.NewGuid(),
+                    AddressId = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"),
+                    OrderId = new Guid(),
+                    DesignId = expectedDesignId,
+                    ShirtId = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"),
+                    WhoFor = expectedWhoFor
+                }
+            };
 
-            var actual = ViewModelFactory.CreateProductVM(design, image);
+            var actual = ViewModelFactory.CreateProductVM(design, image, orderList, shirts, addresses);
 
             Assert.AreEqual(expectedDesignId, actual.DesignId);
             Assert.AreEqual(expDescription, actual.Design.Description);
             Assert.AreEqual(expTitle, actual.Design.Title);
             Assert.AreEqual(expectedImageSource, actual.Design.ImageSource);
             Assert.AreEqual(expectedOrderTotal, actual.OrderTotal);
+            Assert.AreEqual(1, actual.OrderItems.Count);
+            Assert.AreEqual(expectedAlias, actual.OrderItems[0].AddressAlias);
+            Assert.AreEqual(expectedSize, actual.OrderItems[0].Size);
+            Assert.AreEqual(expectedWhoFor, actual.OrderItems[0].WhoFor);
+            Assert.AreEqual(expectedDesignId, actual.OrderItems[0].DesignId);
+        }
+
+        [TestMethod]
+        public void CreateProductModelMultipleDesignOrderItems()
+        {
+            var imageId = Guid.NewGuid();
+            var bytes = Encoding.UTF8.GetBytes("Bytes");
+            var expectedImageSource = $"data:image/jpeg;base64,{Convert.ToBase64String(bytes)}";
+            var expectedDesignId = new Guid();
+            var expDescription = "description";
+            var displayOnFrontPage = true;
+            var expTitle = "title";
+            var releaseDate = DateTime.Now;
+            var expectedOrderTotal = 0;
+            var expectedAlias = "Alias 1";
+            var expectedSize = "S";
+            var expectedWhoFor = "Me";
+            var expectedId = Guid.NewGuid();
+            var image = new Image
+            {
+                Id = imageId,
+                Bytes = bytes
+            };
+            var design = new Design
+            {
+                Id = expectedDesignId,
+                Description = expDescription,
+                DisplayOnFrontPage = displayOnFrontPage,
+                Title = expTitle,
+                ImageId = imageId,
+                ReleaseDate = releaseDate,
+            };
+            var shirts = new List<Shirt>
+            {
+                new Shirt {Id = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"), Brand = "Gildan", Model="G500", Size=expectedSize},
+            };
+            var addresses = new List<Address>
+            {
+                new Address {Id = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"), Alias = expectedAlias, CustomerGuid = new Guid(), Recipient = "Recipient 1", StreetAddress1 = "street address 1", CityStateZip = "csz 1" },
+            };
+            var orderList = new List<OrderItem>
+            {
+                new OrderItem
+                {
+                    Id = expectedId,
+                    AddressId = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"),
+                    OrderId = new Guid(),
+                    DesignId = expectedDesignId,
+                    ShirtId = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"),
+                    WhoFor = expectedWhoFor
+                },
+                new OrderItem
+                {
+                    Id = expectedId,
+                    AddressId = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"),
+                    OrderId = new Guid(),
+                    DesignId = Guid.NewGuid(),
+                    ShirtId = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"),
+                    WhoFor = expectedWhoFor
+                },
+                new OrderItem
+                {
+                    Id = expectedId,
+                    AddressId = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"),
+                    OrderId = new Guid(),
+                    DesignId = Guid.NewGuid(),
+                    ShirtId = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"),
+                    WhoFor = expectedWhoFor
+                }
+            };
+
+            var actual = ViewModelFactory.CreateProductVM(design, image, orderList, shirts, addresses);
+
+            Assert.AreEqual(expectedDesignId, actual.DesignId);
+            Assert.AreEqual(expDescription, actual.Design.Description);
+            Assert.AreEqual(expTitle, actual.Design.Title);
+            Assert.AreEqual(expectedImageSource, actual.Design.ImageSource);
+            Assert.AreEqual(expectedOrderTotal, actual.OrderTotal);
+            Assert.AreEqual(1, actual.OrderItems.Count);
+            Assert.AreEqual(expectedAlias, actual.OrderItems[0].AddressAlias);
+            Assert.AreEqual(expectedSize, actual.OrderItems[0].Size);
+            Assert.AreEqual(expectedWhoFor, actual.OrderItems[0].WhoFor);
+            Assert.AreEqual(expectedDesignId, actual.OrderItems[0].DesignId);
+            Assert.AreEqual(expectedId, actual.OrderItems[0].Id);
         }
 
         [TestMethod]

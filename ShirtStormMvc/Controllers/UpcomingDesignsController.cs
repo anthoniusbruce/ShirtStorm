@@ -53,10 +53,10 @@ namespace ShirtStormMvc.Controllers
 
         private static List<OrderItem> _orderItems = new List<OrderItem>
         {
-            new OrderItem {Id = Guid.NewGuid(), AddressId = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"), CustomerId = new Guid(), DesignId = new Guid(), ShirtId = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"), WhoFor = "Who for 1" },
-            new OrderItem {Id = Guid.NewGuid(), AddressId = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"), CustomerId = new Guid(), DesignId = new Guid(), ShirtId = new Guid("AEA43BBA-8E2E-422B-899A-FFFD527348E8"), WhoFor = "Who for 2" },
-            new OrderItem {Id = Guid.NewGuid(), AddressId = new Guid("9C4BBC9F-241F-4AE3-A48B-89E64C5B12A8"), CustomerId = new Guid(), DesignId = new Guid(), ShirtId = new Guid("FD2E5A43-2E42-4D3E-9B91-7CC01984EB42"), WhoFor = "Who for 3" },
-            new OrderItem {Id = Guid.NewGuid(), AddressId = new Guid("9C4BBC9F-241F-4AE3-A48B-89E64C5B12A8"), CustomerId = new Guid(), DesignId = new Guid(), ShirtId = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"), WhoFor = "Who for 4" },
+            new OrderItem {Id = Guid.NewGuid(), AddressId = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"), OrderId = new Guid(), DesignId = new Guid("7a116c22-ec48-4229-97f0-d28df3f74a0c"), ShirtId = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"), WhoFor = "Who for 1" },
+            new OrderItem {Id = Guid.NewGuid(), AddressId = new Guid("F11114D9-C125-426B-8D5D-A8F84A824404"), OrderId = new Guid(), DesignId = new Guid("7a116c22-ec48-4229-97f0-d28df3f74a0c"), ShirtId = new Guid("AEA43BBA-8E2E-422B-899A-FFFD527348E8"), WhoFor = "Who for 2" },
+            new OrderItem {Id = Guid.NewGuid(), AddressId = new Guid("9C4BBC9F-241F-4AE3-A48B-89E64C5B12A8"), OrderId = new Guid(), DesignId = new Guid("7a116c22-ec48-4229-97f0-d28df3f74a0c"), ShirtId = new Guid("FD2E5A43-2E42-4D3E-9B91-7CC01984EB42"), WhoFor = "Who for 3" },
+            new OrderItem {Id = Guid.NewGuid(), AddressId = new Guid("9C4BBC9F-241F-4AE3-A48B-89E64C5B12A8"), OrderId = new Guid(), DesignId = new Guid("7a116c22-ec48-4229-97f0-d28df3f74a0c"), ShirtId = new Guid("5EDB1302-4DF1-4FB2-9C2D-143F99126549"), WhoFor = "Who for 4" },
         };
 
         public UpcomingDesignsController(ILogger<HomeController> logger, ShirtStormDbContext dbContext)
@@ -163,19 +163,11 @@ namespace ShirtStormMvc.Controllers
                         where design.ReleaseDate == null
                         join image in _dbContext.Images
                             on design.ImageId equals image.Id
-                        select ViewModelFactory.CreateProductVM(design, image);
+                        select ViewModelFactory.CreateProductVM(design, image, _orderItems, _shirts, _addresses);
 
             var products = query.ToListAsync();
 
-            var cartItems = (from item in _orderItems select ViewModelFactory.CreateOrderItemSummaryViewModel(item, _shirts, _addresses)).ToList();
-
-            ViewData["Products"] = products;
-            ViewData["Cart"] = new CartViewModel
-            {
-                OrderItems = cartItems
-            };
-
-            return ViewComponent("Products");
+            return ViewComponent("Products", products);
         }
 
         public async Task<IActionResult> AddressUpdateBlock(Guid? id)

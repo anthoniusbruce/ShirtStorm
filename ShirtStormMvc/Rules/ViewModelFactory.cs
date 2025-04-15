@@ -78,11 +78,12 @@ namespace ShirtStormMvc.Rules
             return new CommissionViewModel { Id = Guid.NewGuid(), Description = string.Empty, CreatedDate = DateTime.Today };
         }
 
-        public static ProductViewModel CreateProductVM(Design design, Image image)
+        public static ProductViewModel CreateProductVM(Design design, Image image, List<OrderItem> orderList, List<Shirt> shirts, List<Address> addresses)
         {
             var ret = new ProductViewModel
             {
                 Design = CreateFrontPageDesignVM(design, image),
+                OrderItems = (from order in orderList where order.DesignId == design.Id select CreateOrderItemSummaryViewModel(order, shirts, addresses)).ToList(),
                 DesignId = design.Id,
             };
 
@@ -94,6 +95,7 @@ namespace ShirtStormMvc.Rules
             var model = new OrderItemSummaryViewModel
             {
                 Id = orderItem.Id,
+                DesignId = orderItem.DesignId,
                 WhoFor = orderItem.WhoFor
             };
 

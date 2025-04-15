@@ -5,19 +5,16 @@ namespace ShirtStormMvc.ViewComponents
 {
     public class ProductsViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync(Task<List<ProductViewModel>>? task)
+        public async Task<IViewComponentResult> InvokeAsync(Task<List<ProductViewModel>>? productsTask)
         {
-            List<ProductViewModel> model;
-            if (task == null)
+            var products = new List<ProductViewModel>();
+
+            if (productsTask != null)
             {
-                model = new List<ProductViewModel>();
-            }
-            else
-            {
-                model = await task ?? new List<ProductViewModel>();
+                products = await productsTask;
             }
 
-            return View(model);
+            return View(products);
         }
     }
 }

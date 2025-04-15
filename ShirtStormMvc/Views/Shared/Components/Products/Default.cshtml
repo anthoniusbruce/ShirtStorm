@@ -1,21 +1,15 @@
-﻿@{
-	var pData = ViewData["Products"] as Task<List<ProductViewModel>>;
-	List<ProductViewModel> products = pData == null ? new List<ProductViewModel>() : await pData;
-
-	var cData = ViewData["Cart"] as CartViewModel;
-	CartViewModel cart = cData == null ? new CartViewModel { OrderItems = new List<OrderItemSummaryViewModel>() } : cData;
-}
+﻿@model List<ProductViewModel>
 
 <div>
-	@for (int i = 0; i < products.Count(); ++i)
+	@for (int i = 0; i < Model.Count(); ++i)
 	{
 		<div class="upcoming-row">
 			<div class="upcoming-col-20">
-				<img src="@products[i].Design.ImageSource" alt="@products[i].Design.Title" />
+				<img src="@Model[i].Design.ImageSource" alt="@Model[i].Design.Title" />
 			</div>
-			<div class="upcoming-col-60" id="@products[i].DesignId">
+			<div class="upcoming-col-60" id="@Model[i].DesignId">
 				<div>
-					<p><i>@products[i].Design.Title</i>, @products[i].Design.Description</p>
+					<p><i>@Model[i].Design.Title</i>, @Model[i].Design.Description</p>
 					<div class="col-sm-12 address-table-div" id="order-grid-replacement">
 						<table class="table address-table">
 							<thead>
@@ -23,16 +17,16 @@
 									<th>Whom For</th>
 									<th>Shirt Size</th>
 									<th>Send To</th>
-									<th class="address-table-column-15"><a href="#" onclick="orderUpdateBlock(orderBlock:'@products[i].DesignId');">Add Shirt</a></th>
+									<th class="address-table-column-15"><a href="#" onclick="orderUpdateBlock(orderBlock:'@Model[i].DesignId');">Add Shirt</a></th>
 								</tr>
 							</thead>
-							@foreach (var item in cart.OrderItems)
+							@foreach (var item in Model[i].OrderItems)
 							{
 								<tr>
 									<td>@Html.DisplayFor(modelItem => item.WhoFor)</td>
 									<td>@Html.DisplayFor(modelItem => item.Size)</td>
 									<td>@Html.DisplayFor(modelItem => item.AddressAlias)</td>
-									<td><a href="#" onclick="orderUpdateBlock(orderBlock:'@products[i].DesignId',itemId:'@item.Id');">Edit</a> | <a asp-controller="UpcomingDesigns" asp-action="OrderItemDelete" asp-route-id="@item.Id" asp-route-returnTo="@products[i].DesignId">Delete</a></td>
+									<td><a href="#" onclick="orderUpdateBlock(orderBlock:'@Model[i].DesignId',itemId:'@item.Id');">Edit</a> | <a asp-controller="UpcomingDesigns" asp-action="OrderItemDelete" asp-route-id="@item.Id" asp-route-returnTo="@Model[i].DesignId">Delete</a></td>
 								</tr>
 							}
 						</table>
@@ -42,13 +36,13 @@
 			<div class="upcoming-col-20 order">
 				<h1>Shirts:</h1>
 				<div class="centered">
-					@if (products[i].OrderTotal == 1) 
+					@if (Model[i].OrderTotal == 1) 
 					{
-						<h2> @products[i].OrderTotal shirt</h2>
+						<h2> @Model[i].OrderTotal shirt</h2>
 					}
 					else
 					{
-						<h2> @products[i].OrderTotal shirts</h2>
+						<h2> @Model[i].OrderTotal shirts</h2>
 
 					}
 				</div>
