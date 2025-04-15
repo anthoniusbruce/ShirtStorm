@@ -6,7 +6,7 @@ namespace ShirtStormCommon.Models
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid CustomerId { get; set; }
+        public Guid OrderId { get; set; }
         public Guid DesignId { get; set; }
         public Guid ShirtId { get; set; }
         public Guid AddressId { get; set; }
