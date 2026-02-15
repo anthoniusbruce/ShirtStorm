@@ -21,13 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ShirtStormCommon">
-      <HintPath>CommonAssemblies\ShirtStormCommon.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Database\" />
+    <ProjectReference Include="..\ShirtStormCommon\ShirtStormCommon.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,42 @@
 # ShirtStorm
-Shirt storm is a Blazor Server SPA that is intended to be a subscription store for tee-shirts. This app runs on Azure. This document will attempt to keep up with steps taken to support he app on Azure.
+
+ShirtStorm is a subscription-based t-shirt store application that runs on Azure. This repository is structured as a monorepo containing multiple related projects.
+
+## Repository Structure
+
+```
+ShirtStorm/
+├── src/
+│   ├── ShirtStormMvc/              - Main ASP.NET Core MVC web application
+│   ├── ShirtStormCommon/           - Shared class library (models, utilities)
+│   ├── ShirtStormBackOfStore/      - Blazor WebAssembly admin application
+│   └── ShirtStormAddImages/        - Console utility for database image management
+└── tests/
+    ├── ShirtStormTests/            - Tests for ShirtStormMvc
+    └── ShirtStormCommon.Tests/     - Tests for ShirtStormCommon
+```
+
+## Projects
+
+- **ShirtStormMvc**: Main web application built with ASP.NET Core MVC and Entity Framework Core
+- **ShirtStormCommon**: Shared class library containing common models and utilities
+- **ShirtStormBackOfStore**: Admin interface built with Blazor WebAssembly
+- **ShirtStormAddImages**: Command-line tool for managing product images
+- **ShirtStormTests**: Unit and integration tests for the main web application
+- **ShirtStormCommon.Tests**: Unit tests for the shared class library
+
+## Building the Solution
+
+```bash
+dotnet restore
+dotnet build
+```
+
+## Running Tests
+
+```bash
+dotnet test
+```
 ## Azure Active Directory B2C Steps
 Follow steps at https://blazorhelpwebsite.com/ViewBlogPost/55
 ## Add key for appsettings encryption/decryption
