@@ -9,13 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ShirtStormMvc\ShirtStormMvc.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="ShirtStormCommon">
-      <HintPath>..\ShirtStormMvc\CommonAssemblies\ShirtStormCommon.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\src\ShirtStormCommon\ShirtStormCommon.csproj" />
   </ItemGroup>
 
   <ItemGroup>
