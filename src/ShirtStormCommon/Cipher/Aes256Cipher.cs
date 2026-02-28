@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Aes256Cipher
+namespace ShirtStormCommon.Cipher
 {
     public static class Aes256Cipher
     {

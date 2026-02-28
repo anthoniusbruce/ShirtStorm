@@ -1,8 +1,8 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using Aes256Cipher;
+using ShirtStormCommon.Cipher;
 
-namespace Aes256Cipher.Tests
+namespace ShirtStormCommon.Tests
 {
     [TestClass]
     public sealed class Aes256CipherTests

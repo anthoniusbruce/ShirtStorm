@@ -1,4 +1,4 @@
-﻿using Cipher = Aes256Cipher.Aes256Cipher;
+﻿using ShirtStormCommon.Cipher;
 
 namespace ShirtStormMvc.Extensions
 {
@@ -18,7 +18,7 @@ namespace ShirtStormMvc.Extensions
                     if (child.Value?.StartsWith(cipherPrefix) == true)
                     {
                         var cipherText = child.Value.Substring(cipherPrefix.Length);
-                        parent[child.Key] = Cipher.Decrypt(cipherText, secret);
+                        parent[child.Key] = Aes256Cipher.Decrypt(cipherText, secret);
                     }
 
                     DecryptInChildren(child, secret);
