@@ -18,6 +18,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShirtStormTests", "tests\Sh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShirtStormCommon.Tests", "tests\ShirtStormCommon.Tests\ShirtStormCommon.Tests.csproj", "{F153FC5C-DFFE-4C06-A2C0-1C28801A818B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aes256Cipher", "src\Aes256Cipher\Aes256Cipher.csproj", "{C9D0E1F2-3456-789A-BCDE-F01234567890}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aes256Cipher.Tests", "tests\Aes256Cipher.Tests\Aes256Cipher.Tests.csproj", "{D0E1F2A3-4567-89AB-CDEF-012345678901}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +52,14 @@ Global
 		{F153FC5C-DFFE-4C06-A2C0-1C28801A818B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F153FC5C-DFFE-4C06-A2C0-1C28801A818B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F153FC5C-DFFE-4C06-A2C0-1C28801A818B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9D0E1F2-3456-789A-BCDE-F01234567890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9D0E1F2-3456-789A-BCDE-F01234567890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9D0E1F2-3456-789A-BCDE-F01234567890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9D0E1F2-3456-789A-BCDE-F01234567890}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0E1F2A3-4567-89AB-CDEF-012345678901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0E1F2A3-4567-89AB-CDEF-012345678901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0E1F2A3-4567-89AB-CDEF-012345678901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0E1F2A3-4567-89AB-CDEF-012345678901}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

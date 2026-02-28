@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Aes256Cipher\Aes256Cipher.csproj" />
     <ProjectReference Include="..\ShirtStormCommon\ShirtStormCommon.csproj" />
   </ItemGroup>
 
